@@ -1,14 +1,14 @@
 import './assets/main.css';
+import './assets/tailwind.css';
+import 'vuetify/styles';
 
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
-
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
 
 import App from './App.vue';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import { createVuetify } from 'vuetify';
 import router from './router';
 
 const vuetify = createVuetify({
