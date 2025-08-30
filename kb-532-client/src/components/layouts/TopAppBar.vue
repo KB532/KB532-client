@@ -19,7 +19,7 @@ import logoUrl from '@/assets/logo/532LOGO.svg'
     <div class="max-w-[375px] mx-auto bg-white">
       <nav class="h-14 flex items-center justify-between px-4">
         <RouterLink to="/" class="inline-flex items-center">
-          <img :src="logoUrl" alt="532 Logo" class="h-[36px] w-auto" />
+          <img :src="logoUrl" alt="532 Logo" class="h-auto w-[50px]" />
         </RouterLink>
 
         <button type="button" class="p-2" aria-label="알림">

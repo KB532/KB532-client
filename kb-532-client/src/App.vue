@@ -7,7 +7,7 @@ import TopAppBar from './components/layouts/TopAppBar.vue';
 <template>
   <div class="relative bg-gray-100">
     <TopAppBar/>
-    <div class="pt-14">
+    <div class="pt-[72px] p-4">
       <RouterView />
     </div>
     <BottomNavigationBar />

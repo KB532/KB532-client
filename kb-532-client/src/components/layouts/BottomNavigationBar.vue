@@ -29,7 +29,7 @@ const textClass = (to) => [
 <template>
   <nav
     v-if="!isHidden"
-    class="flex rounded-t-[16px] border-gray-100 bg-white shadow-bottom-navbar justify-around items-center fixed bottom-0 left-0 right-0 max-w-[375px] mx-auto"
+    class="flex rounded-t-[16px] border-gray-100 bg-white shadow-bottom-navbar-shadow justify-around items-center fixed bottom-0 left-0 right-0 max-w-[375px] mx-auto"
   >
     <ul class="h-[90px] flex items-start pt-2 gap-12">
       <li v-for="item in items" :key="item.to" class="flex-1 flex justify-center">
