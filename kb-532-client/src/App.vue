@@ -1,11 +1,13 @@
 <script setup>
 import { RouterView } from 'vue-router';
 import BottomNavigationBar from './components/layouts/BottomNavigationBar.vue';
+import TopAppBar from './components/layouts/TopAppBar.vue';
 </script>
 
 <template>
-  <div class="relative">
-    <div class="max-w-[375px] mx-auto bg-white">
+  <div class="relative bg-gray-100">
+    <TopAppBar/>
+    <div class="pt-14">
       <RouterView />
     </div>
     <BottomNavigationBar />
