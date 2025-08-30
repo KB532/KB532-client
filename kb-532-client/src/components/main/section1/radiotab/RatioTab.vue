@@ -17,7 +17,7 @@ const currentTab = ref('spending')
 
     <div class="mt-4">
       <div v-if="currentTab === 'spending'">
-        <ExpenseRadioChart/>
+        <ExpenseRadioChart :actual="{ essential: 60, discretionary: 20, savings: 20 }"/>
       </div>
       <div v-else-if="currentTab === 'goal'">
         <TargetRatioChart/>
