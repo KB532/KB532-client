@@ -1,7 +1,19 @@
 <script setup>
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import Chip from '@/components/common/Chip/BaseChip.vue';
-import SummaryChip from '@/components/common/Chip/SummaryChip.vue';
+import SummaryChipGroup from './SummaryChipGroup.vue';
+
+// TODO: 실제 API 데이터로 교체
+const summaryData = {
+  categories: {
+    shopping: { label: '쇼핑', icon: 'mdi:cart-outline' },
+    dining: { label: '외식비', icon: 'bxs:bowl-rice' },
+    cafe: { label: '카페', icon: 'mdi:coffee-outline' },
+  },
+  shoppingDropPercent: 20,
+  diningRisePercent: 15,
+  cafeTargetPerWeek: 3,
+};
 </script>
 
 <template>
@@ -14,25 +26,25 @@ import SummaryChip from '@/components/common/Chip/SummaryChip.vue';
           전체 리포트 보기 >
         </Chip>
       </div>
-      <div class="flex flex-col gap-1">
-        <!-- TODO: 요약 텍스트 카테고리, 퍼센트, 감소/증가 변경 필요 -->
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <SummaryChip kind="success" />
-            <p class="caption2 flex-1 m-0">쇼핑 지출이 지난주 대비 20% 감소했습니다.</p>
-          </div>
+      <SummaryChipGroup :data="summaryData">
+        <!-- success -->
+        <template #success="{ data }"
+          >{{ data.categories.shopping.label }} 지출이 지난주보다 {{ data.shoppingDropPercent }}%
+          줄었습니다.
+        </template>
 
-          <div class="flex items-center gap-2">
-            <SummaryChip kind="warning" />
-            <p class="caption2 flex-1 m-0">외식비가 지난주 대비 15% 증가했습니다.</p>
-          </div>
+        <!-- warning -->
+        <template #warning="{ data }">
+          {{ data.categories.dining.label }}
+          가 지난주보다 {{ data.diningRisePercent }}% 증가했습니다.
+        </template>
 
-          <div class="flex items-center gap-2">
-            <SummaryChip kind="recommend" />
-            <p class="caption2 flex-1 m-0">다음 주에는 카페 결제를 주 3회 이하로 줄여보세요!</p>
-          </div>
-        </div>
-      </div>
+        <!-- recommend -->
+        <template #recommend="{ data }">
+          다음 주에는 {{ data.categories.cafe.label }} 결제를 주 {{ data.cafeTargetPerWeek }}회
+          이하로 줄여보세요!
+        </template>
+      </SummaryChipGroup>
     </div>
   </BaseCard>
 </template>
