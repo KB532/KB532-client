@@ -1,7 +1,7 @@
 <script setup>
-import BaseCard from '@/components/common/Card/BaseCard.vue'
-import RatioTab from './radiotab/RatioTab.vue'
-import DarkButton from '@/components/common/Button/DarkButton.vue' // ← 추가
+import BaseCard from '@/components/common/Card/BaseCard.vue';
+import RatioTab from './radiotab/RatioTab.vue';
+import DarkButton from '@/components/common/Button/DarkButton.vue';
 </script>
 
 <template>

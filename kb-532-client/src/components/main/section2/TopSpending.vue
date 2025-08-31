@@ -1,15 +1,15 @@
 <script setup>
 defineProps({
-  items: { type: Array }
-})
+  items: { type: Array },
+});
 
 const formatKRWShort = (won) => {
-  if (won == null) return '-'
-  const man = won / 10000
-  return Number.isInteger(man) ? `${man.toLocaleString('ko-KR')}만원` : `${man.toFixed(1)}만원`
-}
-const signClass = (p) => (p > 0 ? 'text-red-200' : 'text-kb-gray-dark')
-const signArrow = (p) => (p > 0 ? '↑' : '–')
+  if (won == null) return '-';
+  const man = won / 10000;
+  return Number.isInteger(man) ? `${man.toLocaleString('ko-KR')}만원` : `${man.toFixed(1)}만원`;
+};
+const signClass = (p) => (p > 0 ? 'text-red-200' : 'text-kb-gray-dark');
+const signArrow = (p) => (p > 0 ? '↑' : '–');
 </script>
 
 <template>

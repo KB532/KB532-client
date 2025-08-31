@@ -1,18 +1,16 @@
 <script setup>
 const { size, variant } = defineProps({
-  size: { type: String, default: 'large' },     // large | small
-  variant: { type: String, default: 'default' } // default | outline
-})
+  size: { type: String, default: 'large' }, // large | small
+  variant: { type: String, default: 'default' }, // default | outline
+});
 </script>
 
 <template>
   <span
-    class="inline-flex items-center justify-center rounded-full font-bold"
+    class="inline-flex items-center justify-center rounded-full"
     :class="[
-      size === 'large' ? 'px-4 h-8 text-sm' : 'px-3 h-7 text-xs',
-      variant === 'default'
-        ? 'bg-[#FFEB99] text-black'
-        : 'border border-gray-300 bg-white text-gray-700'
+      size === 'large' ? 'px-4 h-8 title3' : 'px-3 h-6 caption3',
+      variant === 'default' ? 'bg-[#FFEB99] text-black' : 'bg-gray-100',
     ]"
   >
     <slot />

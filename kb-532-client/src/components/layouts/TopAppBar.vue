@@ -1,17 +1,15 @@
 <script setup>
-import { computed } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
-import { Icon } from '@iconify/vue'
+import { computed } from 'vue';
+import { useRoute, RouterLink } from 'vue-router';
+import { Icon } from '@iconify/vue';
 
 // 숨길 경로들
-const HIDDEN_ROUTES = ['/login']
+const HIDDEN_ROUTES = ['/login'];
 
-const route = useRoute()
-const isHidden = computed(() =>
-  HIDDEN_ROUTES.some(prefix => route.path.startsWith(prefix))
-)
+const route = useRoute();
+const isHidden = computed(() => HIDDEN_ROUTES.some((prefix) => route.path.startsWith(prefix)));
 
-import logoUrl from '@/assets/logo/532LOGO_small.svg'
+import logoUrl from '@/assets/logo/532LOGO_small.svg';
 </script>
 
 <template>
@@ -24,11 +22,7 @@ import logoUrl from '@/assets/logo/532LOGO_small.svg'
 
         <!-- TODO: 알림 기능 추가 -->
         <button type="button" class="p-2" aria-label="알림">
-          <Icon
-            icon="bxs:bell"
-            class="w-[28px] h-auto text-gray-500"
-            aria-hidden="true"
-          />
+          <Icon icon="bxs:bell" class="w-[28px] h-auto text-gray-500" aria-hidden="true" />
         </button>
       </nav>
     </div>

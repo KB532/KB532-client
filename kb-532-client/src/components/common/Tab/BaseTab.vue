@@ -1,6 +1,5 @@
 <template>
-
-<div class="bg-gray-100 rounded h-[36px] p-1">
+  <div class="bg-gray-100 rounded h-[36px] p-1">
     <div class="relative flex h-full gap-1" role="tablist">
       <div
         class="absolute top-0 bottom-0 left-0 rounded bg-white transition-transform duration-200 ease-out"
@@ -24,7 +23,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = defineProps({
   tabs: {
@@ -35,22 +34,22 @@ const props = defineProps({
       value.every((tab) => typeof tab.label === 'string' && typeof tab.value === 'string'),
   },
   modelValue: { type: String, default: null },
-})
-const emit = defineEmits(['update:modelValue'])
-const selectTab = (value) => emit('update:modelValue', value)
+});
+const emit = defineEmits(['update:modelValue']);
+const selectTab = (value) => emit('update:modelValue', value);
 
 const activeIndex = computed(() => {
-  const i = props.tabs.findIndex((t) => t.value === props.modelValue)
-  return i < 0 ? 0 : i
-})
+  const i = props.tabs.findIndex((t) => t.value === props.modelValue);
+  return i < 0 ? 0 : i;
+});
 
-const GAP_PX = 4
+const GAP_PX = 4;
 const indicatorStyle = computed(() => {
-  const count = Math.max(props.tabs.length, 1)
-  const totalGap = (count - 1) * GAP_PX
+  const count = Math.max(props.tabs.length, 1);
+  const totalGap = (count - 1) * GAP_PX;
   return {
     width: `calc((100% - ${totalGap}px) / ${count})`,
     transform: `translateX(calc(${activeIndex.value} * (100% + ${GAP_PX}px)))`,
-  }
-})
+  };
+});
 </script>
