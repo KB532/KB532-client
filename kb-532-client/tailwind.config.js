@@ -48,7 +48,8 @@ export default {
       xxl: '1.5rem', // 24pt
     },
     boxShadow: {
-      'bottom-navbar': '0 -2px 4px rgba(0,0,0,0.06)',
+      'bottom-navbar-shadow': '0 -2px 4px rgba(0,0,0,0.06)',
+      'drop-shadow': '0 4px 6px rgba(0, 0, 0, 0.06)',
     },
   },
   plugins: [],
