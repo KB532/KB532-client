@@ -3,19 +3,19 @@ import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js'
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend)
 
-/** 고정 목표 */
+// TODO: 목표 동적 설정
 const TARGET = { essential: 50, discretionary: 30, savings: 20 }
 
 // 글자 크기/굵기 
 const CAPTION3_PX   = 11  
 const DELTA_PX      = 8   
 const CAPTION_WEIGHT = 500 
-const DELTA_WEIGHT   = 700 
+const DELTA_WEIGHT   = 500 
 
 const props = defineProps({
   actual: {
     type: Object,
-    default: () => ({ essential: 60, discretionary: 20, savings: 20 }),
+    default: () => ({ essential: 0, discretionary: 0, savings: 0 }),
   },
   donutDiameter: { type: Number, default: 120 }, 
 })
@@ -24,7 +24,7 @@ const props = defineProps({
 const labels = ['필수 지출', '자유 지출', '저축']
 const colors = ['#48637E', '#FFC831', '#C0E2FF'] // 도넛 색
 const textGray = '#60584C'
-const lineColor = '#60584C' // 선 & 다이아 동일 색
+const lineColor = '#60584C' 
 
 const actualArr = computed(() => [
   props.actual.essential,
@@ -52,10 +52,10 @@ const Callouts = {
   afterDatasetsDraw(c) {
     const { ctx } = c
     const meta = c.getDatasetMeta(0)
-    const yJitter = [0, 14, -12] // (필수, 자유, 저축) 겹침 방지
+    const yJitter = [0, 14, -12] 
 
     ctx.save()
-    ctx.lineWidth = 1 // 2에서 1로 줄임 - 선을 더 얇게
+    ctx.lineWidth = 1 // 수평선 굵기
     ctx.strokeStyle = lineColor
     ctx.fillStyle = lineColor
 
@@ -79,7 +79,7 @@ const Callouts = {
       ctx.lineTo(ex, ey)
       ctx.stroke()
 
-      // 다이아
+      // 다이아(끄점)
       ctx.fillStyle = lineColor 
       const d = 3.5
       ctx.beginPath()
@@ -97,9 +97,9 @@ const Callouts = {
       const name  = labels[i]
       const val   = actualArr.value[i]
       const delta = deltas.value[i]
-      const sign  = delta > 0 ? '+' : ''
-      const arrow = delta > 0 ? '▲' : delta < 0 ? '▼' : '–'
+      const arrow = delta > 0 ? '▲' : delta < 0 ? '▼' : '-'
       const deltaColor = delta > 0 ? '#DC2626' : delta < 0 ? '#2563EB' : textGray
+      const absDelta = Math.abs(delta)
 
       // 수평선을 기준으로 텍스트 정렬 
       ctx.textAlign = right ? 'right' : 'left'
@@ -114,7 +114,7 @@ const Callouts = {
       ctx.textBaseline = 'middle'
       ctx.fillStyle = deltaColor
       ctx.font = `${DELTA_WEIGHT} ${DELTA_PX}px 'Spoqa Han Sans Neo', sans-serif`
-      ctx.fillText(`목표 대비 ${sign}${delta}% ${arrow}`, tx, ty + 8)
+      ctx.fillText(`목표 대비 ${absDelta}% ${arrow}`, tx, ty + 8)
 
     }) 
 

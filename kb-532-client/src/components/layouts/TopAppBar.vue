@@ -11,7 +11,7 @@ const isHidden = computed(() =>
   HIDDEN_ROUTES.some(prefix => route.path.startsWith(prefix))
 )
 
-import logoUrl from '@/assets/logo/532LOGO.svg'
+import logoUrl from '@/assets/logo/532LOGO_small.svg'
 </script>
 
 <template>
@@ -22,6 +22,7 @@ import logoUrl from '@/assets/logo/532LOGO.svg'
           <img :src="logoUrl" alt="532 Logo" class="h-auto w-[50px]" />
         </RouterLink>
 
+        <!-- TODO: 알림 기능 추가 -->
         <button type="button" class="p-2" aria-label="알림">
           <Icon
             icon="bxs:bell"
