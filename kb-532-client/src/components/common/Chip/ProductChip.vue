@@ -1,32 +1,34 @@
-<!-- src/components/common/Chip/BaseChip.vue -->
 <script setup>
 import { computed } from 'vue';
 
-// slot 사용 + kb-gray 테마
-const { variant, color } = defineProps({
-  variant: { type: String, default: 'solid' }, // 'solid' | 'outline'
+const props = defineProps({
+  active: { type: Boolean, default: false },
   color: { type: String, default: 'kb-gray' },
 });
 
-const colorClass = computed(() => {
-  // kb-gray 테마 (커스텀 컬러 전제: bg-kb-gray, text-kb-gray, border-kb-gray)
-  if (color === 'kb-gray') {
-    return variant === 'solid'
-      ? 'bg-kb-gray text-white border border-kb-gray'
-      : 'bg-white text-kb-gray border-2 border-kb-gray';
+const containerClass = computed(() => {
+  if (props.color === 'kb-gray') {
+    return props.active
+      ? 'bg-kb-gray ring-1 ring-inset ring-kb-gray'
+      : 'bg-white  ring-1 ring-inset ring-kb-gray';
   }
-  // fallback
-  return variant === 'solid'
-    ? 'bg-gray-800 text-white border border-gray-800'
-    : 'bg-white text-gray-800 border-2 border-gray-800';
+  return props.active
+    ? 'bg-kb-gray ring-1 ring-inset ring-kb-gray'
+    : 'bg-white ring-1 ring-inset ring-kb-gray';
 });
+
+const labelClass = computed(() => (props.active ? 'text-white' : 'text-kb-gray'));
 </script>
 
 <template>
-  <span
-    class="inline-flex items-center justify-center rounded-full caption3 whitespace-nowrap leading-none"
-    :class="[colorClass]"
+  <button
+    type="button"
+    class="inline-flex items-center justify-center rounded-full caption3 leading-none h-[23px] px-2 whitespace-nowrap select-none transition-colors focus:outline-none"
+    :class="containerClass"
+    :aria-pressed="active"
   >
-    <slot />
-  </span>
+    <span :class="labelClass">
+      <slot />
+    </span>
+  </button>
 </template>

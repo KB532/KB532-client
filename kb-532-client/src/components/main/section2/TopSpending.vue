@@ -16,11 +16,11 @@ const signArrow = (p) => (p > 0 ? '↑' : '–');
   <div class="mt-4">
     <p class="caption1 text-kb-gray-dark">이번 달 지출 Top 3</p>
 
-    <div class="mt-3 flex flex-wrap gap-2">
+    <div class="mt-2 flex flex-wrap gap-2">
       <div
         v-for="(it, idx) in items"
         :key="idx"
-        class="w-[96px] h-[68px] rounded-lg bg-gray-100 px-3 py-2 text-center"
+        class="w-[96px] h-[68px] rounded-lg bg-[#F8F8F8] px-3 py-2 text-center"
       >
         <!-- 카테고리명 -->
         <p class="caption3 text-black">{{ it.label }}</p>

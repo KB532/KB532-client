@@ -2,6 +2,7 @@
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import Chip from '@/components/common/Chip/BaseChip.vue';
 import SummaryChipGroup from './SummaryChipGroup.vue';
+import { Icon } from '@iconify/vue';
 
 // TODO: 실제 API 데이터로 교체
 const summaryData = {
@@ -23,7 +24,8 @@ const summaryData = {
         <p class="subtitle2">주간 리포트 요약</p>
         <!-- TODO: 버튼 클릭 시 동작 정의 -->
         <Chip size="small" variant="outline" class="shrink-0 whitespace-nowrap">
-          전체 리포트 보기 >
+          전체 리포트 보기
+          <Icon icon="material-symbols:chevron-right" class="w-4 h-auto text-kb-gray-dark" />
         </Chip>
       </div>
       <SummaryChipGroup :data="summaryData">
