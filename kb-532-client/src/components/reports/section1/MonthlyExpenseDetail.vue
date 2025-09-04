@@ -1,10 +1,18 @@
 <script setup>
 import BaseCard from '@/components/common/Card/BaseCard.vue';
-import { Icon } from '@iconify/vue';
+import SelectMonth from '@/components/reports/section1/SelectMonth.vue';
 </script>
 
 <template>
   <BaseCard>
-    <Icon icon="fluent:triangle-left-12-filled" class="text-black"></Icon>
+    <div class="flex flex-col gap-4">
+      <SelectMonth />
+      <div class="flex flex-col">
+        <h1 class="title1 text-black">3,245,624원</h1>
+        <p class="caption2 text-gray-600">
+          8월보다 <span class="text-blue-200">258,370원</span> 덜 썼어요
+        </p>
+      </div>
+    </div>
   </BaseCard>
 </template>
