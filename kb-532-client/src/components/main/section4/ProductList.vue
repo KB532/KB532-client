@@ -74,8 +74,8 @@ const onItemClick = () => {
 <template>
   <div>
     <div v-if="loading" class="space-y-3">
-      <div class="h-10 rounded-xl bg-gray-100 animate-pulse" />
-      <div class="h-10 rounded-xl bg-gray-100 animate-pulse" />
+      <div class="h-10 rounded-xl bg-gray-200 animate-pulse" />
+      <div class="h-10 rounded-xl bg-gray-200 animate-pulse" />
     </div>
 
     <ul v-else class="divide-y divide-[#F4F4F4]">

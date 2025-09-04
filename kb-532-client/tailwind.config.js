@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Spoqa Han Sans Neo', 'sans-serif'],
+        sans: ['"Spoqa Han Sans Neo"', 'sans-serif'],
       },
       colors: {
         kb: {
@@ -18,9 +18,10 @@ export default {
             dark: '#54504C',
           },
         },
-        black: '#222222',
+        black: '#282725',
         gray: {
-          100: '#F4F4F4',
+          100: '#F8F8F8',
+          200: '#F4F4F4',
           600: '#8F8F8F',
         },
         white: '#FEFEFE',
@@ -33,8 +34,8 @@ export default {
           200: '#35B100',
         },
         blue: {
-          100: '#E6F1FF',
-          200: '#1E7BF3',
+          100: '#E7EFFF',
+          200: '#1E61F3',
         },
       },
     },
