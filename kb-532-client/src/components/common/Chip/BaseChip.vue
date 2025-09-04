@@ -10,7 +10,7 @@ const { size, variant } = defineProps({
     class="inline-flex items-center justify-center rounded-full"
     :class="[
       size === 'large' ? 'px-4 h-8 title3' : 'px-3 h-6 caption3',
-      variant === 'default' ? 'bg-[#FFEB99] text-black' : 'bg-gray-100',
+      variant === 'default' ? 'bg-[#FFEB99] text-black' : 'bg-gray-200',
     ]"
   >
     <slot />

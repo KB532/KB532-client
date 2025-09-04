@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 rounded h-[36px] p-1">
+  <div class="bg-gray-200 rounded h-[36px] p-1">
     <div class="relative flex h-full gap-1" role="tablist">
       <div
         class="absolute top-0 bottom-0 left-0 rounded bg-white transition-transform duration-200 ease-out"
