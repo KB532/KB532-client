@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Spoqa Han Sans Neo', 'sans-serif'],
+        sans: ['"Spoqa Han Sans Neo"', 'sans-serif'],
       },
       colors: {
         kb: {
