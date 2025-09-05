@@ -1,1 +1,3 @@
-<template>AiCoachingView</template>
+<template>
+  <div class="bg-white">AiCoachingView</div>
+</template>

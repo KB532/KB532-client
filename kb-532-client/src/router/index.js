@@ -14,8 +14,14 @@ const router = createRouter({
       component: HomeView,
     },
     ...reports,
-    ...aiCoaching,
-    ...menu,
+    ...aiCoaching.map((r) => ({
+      ...r,
+      meta: { ...(r.meta || {}), pageBg: 'bg-white' },
+    })),
+    ...menu.map((r) => ({
+      ...r,
+      meta: { ...(r.meta || {}), pageBg: 'bg-white' },
+    })),
   ],
 });
 
