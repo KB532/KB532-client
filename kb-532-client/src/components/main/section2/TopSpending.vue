@@ -16,7 +16,7 @@ const signArrow = (p) => (p > 0 ? '↑' : '–');
   <div class="mt-4">
     <p class="caption1 text-kb-gray-dark">이번 달 지출 Top 3</p>
 
-    <div class="mt-2 flex flex-wrap gap-2">
+    <div class="mt-2 grid grid-cols-3 gap-2">
       <div
         v-for="(it, idx) in items"
         :key="idx"

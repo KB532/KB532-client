@@ -18,9 +18,13 @@ export const useAskStore = defineStore('ask', {
       this.loading = true;
       try {
         this.question = this.text.trim();
+        this.submitted = true;
+
+        setTimeout(() => {
+          this.setAnswer('');
+        }, 5000);
       } finally {
         this.loading = false;
-        this.submitted = true;
       }
     },
 
