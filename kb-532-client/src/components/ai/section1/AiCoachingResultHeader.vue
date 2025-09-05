@@ -7,7 +7,7 @@ import SavingsAccordion from './accordion/SavingsAccordion.vue';
 import InformIcon from '@/assets/ai/INFORM.svg';
 import CalendarIcon from '@/assets/ai/CALENDAR.svg';
 
-const username = '안현주';
+const username = '오삼이';
 </script>
 
 <template>
