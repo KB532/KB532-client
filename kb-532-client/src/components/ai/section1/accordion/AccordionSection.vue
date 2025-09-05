@@ -6,7 +6,6 @@ const props = defineProps({
   title: { type: String, required: true },
   items: { type: Array, default: () => [] },
   defaultOpen: { type: Boolean, default: false },
-  // ✅ 닫혀 있을 때 미리 보여줄 개수 (1 추천, 0이면 미리보기 안 보임)
   previewCount: { type: Number, default: 1 },
 });
 
