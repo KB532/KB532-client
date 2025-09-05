@@ -72,50 +72,48 @@ const onItemClick = () => {
 </script>
 
 <template>
-  <div>
-    <div v-if="loading" class="space-y-3">
-      <div class="h-10 rounded-xl bg-gray-200 animate-pulse" />
-      <div class="h-10 rounded-xl bg-gray-200 animate-pulse" />
-    </div>
+  <div v-if="loading" class="space-y-3">
+    <div class="h-10 rounded-xl bg-gray-200 animate-pulse" />
+    <div class="h-10 rounded-xl bg-gray-200 animate-pulse" />
+  </div>
 
-    <ul v-else class="divide-y divide-[#F4F4F4]">
-      <!-- TODO: 추후 모달이나 페이지 이동 추가 -->
-      <li
-        v-for="(it, i) in items"
-        :key="it.id || i"
-        class="py-3 cursor-pointer select-none"
-        @click="onItemClick(it)"
-      >
-        <div class="flex items-center justify-between">
-          <!-- 로고 + 텍스트 -->
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-[#FFBC00] flex items-center justify-center">
-              <img :src="kbLogoUrl" alt="KB" class="w-5 h-5 object-contain" />
-            </div>
-            <div>
-              <p class="caption3 text-black m-0">{{ it.name }}</p>
-              <p class="caption3 text-gray-600 m-0 mt-0.5">{{ it.desc }}</p>
-            </div>
+  <ul v-else class="divide-y divide-[#F4F4F4]">
+    <!-- TODO: 추후 모달이나 페이지 이동 추가 -->
+    <li
+      v-for="(it, i) in items"
+      :key="it.id || i"
+      class="py-3 cursor-pointer select-none"
+      @click="onItemClick(it)"
+    >
+      <div class="flex items-center justify-between">
+        <!-- 로고 + 텍스트 -->
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-[#FFBC00] flex items-center justify-center">
+            <img :src="kbLogoUrl" alt="KB" class="w-5 h-5 object-contain" />
           </div>
-
-          <!-- '>' 아이콘 -->
-          <Icon
-            icon="material-symbols:arrow-back-ios-new-rounded"
-            class="w-4 h-4 text-kb-gray-dark scale-x-[-1]"
-            aria-hidden="true"
-          />
+          <div>
+            <p class="caption3 text-black m-0">{{ it.name }}</p>
+            <p class="caption3 text-gray-600 m-0 mt-0.5">{{ it.desc }}</p>
+          </div>
         </div>
 
-        <!-- 하단 텍스트 -->
-        <p class="caption3 text-gray-600 mt-2 text-right">
-          {{ it.term }},&nbsp;
-          <span class="text-kb-yellow-positive font-bold">{{ it.rateText }}</span>
-        </p>
-      </li>
+        <!-- '>' 아이콘 -->
+        <Icon
+          icon="material-symbols:arrow-back-ios-new-rounded"
+          class="w-4 h-4 text-kb-gray-dark scale-x-[-1]"
+          aria-hidden="true"
+        />
+      </div>
 
-      <li v-if="items.length === 0" class="py-6 text-center caption3 text-kb-gray-dark">
-        표시할 상품이 없어요.
-      </li>
-    </ul>
-  </div>
+      <!-- 하단 텍스트 -->
+      <p class="caption3 text-gray-600 mt-2 text-right">
+        {{ it.term }},&nbsp;
+        <span class="text-kb-yellow-positive font-bold">{{ it.rateText }}</span>
+      </p>
+    </li>
+
+    <li v-if="items.length === 0" class="py-6 text-center caption3 text-kb-gray-dark">
+      표시할 상품이 없어요.
+    </li>
+  </ul>
 </template>
