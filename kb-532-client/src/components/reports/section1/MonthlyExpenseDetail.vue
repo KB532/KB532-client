@@ -1,6 +1,7 @@
 <script setup>
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import SelectMonth from '@/components/reports/section1/SelectMonth.vue';
+import ExpenseCategoryChart from '@/components/reports/section1/ExpenseCategoryChart.vue';
 </script>
 
 <template>
@@ -13,6 +14,7 @@ import SelectMonth from '@/components/reports/section1/SelectMonth.vue';
           8월보다 <span class="text-blue-200">258,370원</span> 덜 썼어요
         </p>
       </div>
+      <ExpenseCategoryChart />
     </div>
   </BaseCard>
 </template>
