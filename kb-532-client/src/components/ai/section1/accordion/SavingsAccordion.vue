@@ -14,8 +14,8 @@ const defaultOpen = false;
 <template>
   <AccordionSection :title="title" :items="items" :defaultOpen="defaultOpen"
     ><template #img>
-      <div class="flex justify-center mb-3">
-        <img :src="FINANCEimg" class="w-40 h-auto object-contain" />
+      <div class="flex justify-center mb-0">
+        <img :src="FINANCEimg" class="w-48 h-auto object-contain" />
       </div> </template
   ></AccordionSection>
 </template>
