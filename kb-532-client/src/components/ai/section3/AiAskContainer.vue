@@ -7,11 +7,8 @@ import AiQuestionSubmitted from './ask/AiQuestionSubmitted.vue';
 import AiAnswerArrived from './ask/AiAnswerArrived.vue';
 
 const ask = useAskStore();
-const { submitted, loading } = storeToRefs(ask);
+const { submitted, loading, answered, question } = storeToRefs(ask);
 const sentRef = ref(null);
-const showAnswer = ref(false);
-const questionAtSubmit = ref('');
-let timerId;
 
 watch(submitted, async (v) => {
   if (v) {
@@ -20,13 +17,6 @@ watch(submitted, async (v) => {
     setTimeout(() => {
       window.scrollBy({ top: 200, behavior: 'smooth' });
     }, 100);
-
-    // TODO: 추후 답변 도착 시 표시, 현재는 5초 후 자동 표시
-    questionAtSubmit.value = ask.text.trim();
-    clearTimeout(timerId);
-    timerId = setTimeout(() => {
-      showAnswer.value = true;
-    }, 5000);
   }
 });
 
@@ -35,7 +25,6 @@ const handleSubmit = async () => {
 };
 
 onUnmounted(() => {
-  clearTimeout(timerId);
   if (!ask.submitted) {
     ask.reset();
   }
@@ -53,13 +42,13 @@ onUnmounted(() => {
         :locked="submitted"
         @submit="handleSubmit"
       />
-      <div v-else key="submitted" class="relative overflow-hidden min-h-[473px]">
+      <div v-else key="submitted" ref="sentRef" class="relative overflow-hidden min-h-[473px]">
         <Transition name="slide" mode="out-in">
-          <AiQuestionSubmitted v-if="!showAnswer" key="question" />
+          <AiQuestionSubmitted v-if="!answered" key="question" />
           <AiAnswerArrived
             v-else
             key="answer"
-            :question="questionAtSubmit"
+            :question="question"
             :answer="ask.answer || ''"
           />
         </Transition>
