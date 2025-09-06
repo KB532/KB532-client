@@ -14,7 +14,9 @@ import ExpenseCategoryChart from '@/components/reports/section1/ExpenseCategoryC
           8월보다 <span class="text-blue-200">258,370원</span> 덜 썼어요
         </p>
       </div>
-      <ExpenseCategoryChart />
+      <div class="w-full flex flex-col items-center">
+        <ExpenseCategoryChart />
+      </div>
     </div>
   </BaseCard>
 </template>
