@@ -2,6 +2,7 @@
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import SelectMonth from '@/components/reports/section1/SelectMonth.vue';
 import ExpenseCategoryChart from '@/components/reports/section1/ExpenseCategoryChart.vue';
+import ShowDetailButton from '@/components/reports/section1/ShowDetailButton.vue';
 </script>
 
 <template>
@@ -17,6 +18,7 @@ import ExpenseCategoryChart from '@/components/reports/section1/ExpenseCategoryC
       <div class="w-full flex flex-col items-center">
         <ExpenseCategoryChart />
       </div>
+      <ShowDetailButton />
     </div>
   </BaseCard>
 </template>
