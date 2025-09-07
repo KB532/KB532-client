@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { Icon } from '@iconify/vue';
-import SelectMonthModal from '@/components/reports/section1/SelectMonthModal.vue';
+import SelectMonthModal from '@/components/reports/section1/select-month/SelectMonthModal.vue';
 
 const today = new Date();
 const selectedMonth = ref(today.getMonth() + 1);
