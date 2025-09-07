@@ -1,9 +1,16 @@
 <script setup>
+import { ref } from 'vue';
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import SelectMonth from '@/components/reports/section1/SelectMonth.vue';
 import ExpenseCategoryChart from '@/components/reports/section1/ExpenseCategoryChart.vue';
 import ShowDetailButton from '@/components/reports/section1/ShowDetailButton.vue';
 import ExpenseDetailList from '@/components/reports/section1/expense-detail-list/ExpenseDetailList.vue';
+
+const isOpenList = ref(false);
+
+const handleClick = () => {
+  isOpenList.value = !isOpenList.value;
+}
 </script>
 
 <template>
@@ -19,8 +26,8 @@ import ExpenseDetailList from '@/components/reports/section1/expense-detail-list
       <div class="w-full flex flex-col items-center">
         <ExpenseCategoryChart />
       </div>
-      <ShowDetailButton />
-      <ExpenseDetailList />
+      <ShowDetailButton v-model="isOpenList" :onClick="handleClick" />
+      <ExpenseDetailList v-model="isOpenList" />
     </div>
   </BaseCard>
 </template>
