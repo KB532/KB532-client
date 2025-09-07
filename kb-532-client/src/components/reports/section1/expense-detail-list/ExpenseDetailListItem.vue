@@ -1,5 +1,6 @@
 <script setup>
 import CategoryIcon from '@/components/common/Avatar/IconAvatar.vue';
+import { numberWithCommas } from "@/assets/utils/index.js";
 
 const props = defineProps({
   category: String,
@@ -30,6 +31,6 @@ const categoryLabels = {
         <p class="caption3 text-gray-600">{{ props.percent }}%</p>
       </div>
     </div>
-    <p class="subtitle1 text-black">{{ props.amount }}원</p>
+    <p class="subtitle1 text-black">{{ numberWithCommas(props.amount) }}원</p>
   </div>
 </template>
