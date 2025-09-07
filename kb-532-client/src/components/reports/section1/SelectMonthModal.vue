@@ -1,5 +1,6 @@
 <script setup>
 import { Icon } from '@iconify/vue';
+import {computed} from "vue";
 
 const props = defineProps({
   modelValue: Boolean,
@@ -16,6 +17,26 @@ const handleSelect = (month) => {
   emits('selectMonth', month);
   close();
 };
+
+const today = new Date();
+const thisMonth = today.getMonth();
+const thisYear = today.getFullYear();
+const monthsList = computed(() => {
+  const arr = [];
+  let year = thisYear;
+  let month = thisMonth;
+
+  for (let i = 0; i < 12; i++) {
+    arr.push({ year, month });
+
+    month -= 1;
+    if (month === 0) {
+      month = 12;
+      year -= 1;
+    }
+  }
+  return arr;
+});
 </script>
 
 <template>
@@ -31,14 +52,13 @@ const handleSelect = (month) => {
         />
       </div>
 
-<!--      Todo: 현재 월을 기준으로 내림차순하기-->
       <div
-        v-for="m in 12"
-        :key="m"
-        @click="handleSelect(m)"
+        v-for="({ year, month }, i) in monthsList"
+        :key="i"
+        @click="handleSelect(month)"
         class="cursor-pointer body2 text-black px-4 py-2 hover:bg-gray-200"
       >
-        {{ props.selectedYear }}년 {{ m }}월
+        {{ year }}년 {{ month }}월
       </div>
     </div>
   </v-bottom-sheet>
