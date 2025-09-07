@@ -5,7 +5,7 @@ const props = defineProps({
   category: String,
 });
 
-const categoryInfo = {
+const categoryIcon = {
   shopping: { // 쇼핑
     icon: 'mdi:shopping',
     color: 'text-[#00DE5A]'
@@ -48,7 +48,7 @@ const categoryInfo = {
   }
 };
 
-const currentCategory = categoryInfo[props.category] || {
+const currentCategory = categoryIcon[props.category] || {
   icon: '', // Todo: 데이터 없을 시 표시할 아이콘 정하기
   color: 'text-gray-600',
 };
