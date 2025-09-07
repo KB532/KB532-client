@@ -1,6 +1,4 @@
-import './assets/main.css';
-import './assets/tailwind.css';
-import 'vuetify/styles';
+import "@/assets/tailwind.css";
 
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
