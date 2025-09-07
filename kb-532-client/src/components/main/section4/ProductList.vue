@@ -1,71 +1,65 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import kbLogoUrl from '@/assets/bank/KBlogo.svg';
+import { fetchProducts } from '@/api/products';
 
 const props = defineProps({
   category: { type: String, required: true },
 });
 
 const loading = ref(false);
+const items = ref([]);
 
-// TODO: 목데이터, 추후 API 응답으로 교체
-const MOCK = {
-  savings: [
-    {
-      id: 'kb-star-saving',
-      name: 'KB스타적금',
-      desc: '한 달만 유지해도 확정이자율을 드리는',
-      term: '12개월 기준',
-      rateText: '연 3% ~ 6%',
-    },
-    {
-      id: 'kb-health-saving',
-      name: 'KB스타 건강적금',
-      desc: '저축과 건강관리 한번에',
-      term: '6개월 기준',
-      rateText: '연 1% ~ 6%',
-    },
-    {
-      id: 'kb-youth',
-      name: 'KB 청년 도약계좌',
-      desc: '힘찬 미래 높은 도약',
-      term: '60개월 기준',
-      rateText: '연 4.5% ~ 6%',
-    },
-    {
-      id: 'kb-special',
-      name: 'KB 특★한 적금',
-      desc: '우리 모두의 소중한 날을 위한 특별한 준비',
-      term: '1개월 기준',
-      rateText: '연 2% ~ 6%',
-    },
-  ],
-  'time-deposit': [
-    {
-      id: 'kb-td-12',
-      name: 'KB 정기예금',
-      desc: '기본에 충실한 예금',
-      term: '12개월 기준',
-      rateText: '연 3.2% ~ 4.0%',
-    },
-    {
-      id: 'kb-td-6',
-      name: 'KB 정기예금(6개월)',
-      desc: '6개월 만기 정기예금',
-      term: '6개월 기준',
-      rateText: '연 2.5% ~ 3.0%',
-    },
-  ],
-  pension: [],
-  fund: [],
-  'subscription-bond': [],
-  isa: [],
+const mapCategoryToApiType = (cat) => {
+  switch (cat) {
+    case 'savings':
+      return 'SAVINGS';
+    case 'time-deposit':
+      return 'DEPOSIT';
+    case 'subscription-bond':
+      return 'HOUSING';
+    case 'pension':
+      return 'PENSION';
+    case 'fund':
+      return 'FUND';
+    case 'isa':
+      return 'ISA';
+    default:
+      return 'SAVINGS';
+  }
 };
 
-const items = computed(() => MOCK[props.category] ?? []);
+const loadProducts = async () => {
+  loading.value = true;
+  try {
+    const raw = await fetchProducts(mapCategoryToApiType(props.category));
+    items.value = raw.map((it) => ({
+      id: it.id,
+      name: it.name,
+      desc: it.eligibility || (it.features?.join(', ') ?? ''),
+      term: it.term,
+      rateText: `연 ${it.rate.base}% ~ ${it.rate.max}%`,
+      link: it.link,
+    }));
+  } catch (e) {
+    console.error('상품 조회 실패:', e);
+    items.value = [];
+  } finally {
+    loading.value = false;
+  }
+};
+
+watch(
+  () => props.category,
+  () => {
+    loadProducts();
+  },
+  { immediate: true },
+);
 
 // TODO: 추후 모달 열기 또는 페이지 이동(router.push) 로직 추가
+
 const onItemClick = () => {
   alert('😍');
 };

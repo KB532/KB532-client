@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import BaseTab from '@/components/common/Tab/BaseTab.vue';
 import ExpenseRadioChart from './radiochart/ExpenseRadioChart.vue';
 import TargetRatioChart from './radiochart/TargetRatioChart.vue';
+import { getBudgetSummary } from '@/api/budget';
 
 const tabs = [
   { label: '지출 비율', value: 'spending' },
@@ -10,6 +11,32 @@ const tabs = [
 ];
 
 const currentTab = ref('spending');
+
+const loading = ref(false);
+const error = ref('');
+const actual = ref({ essential: 0, discretionary: 0, savings: 0 });
+
+const pct = (v) => Math.round(Number(v || 0) * 100);
+
+async function load() {
+  loading.value = true;
+  error.value = '';
+  try {
+    const data = await getBudgetSummary();
+    const r = data?.data?.actual || {};
+    actual.value = {
+      essential: pct(r.essential),
+      discretionary: pct(r.discretionary),
+      savings: pct(r.savings),
+    };
+  } catch (e) {
+    error.value = e.message || '불러오기 실패';
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(load);
 </script>
 
 <template>
@@ -17,9 +44,9 @@ const currentTab = ref('spending');
 
   <div class="mt-4">
     <div v-if="currentTab === 'spending'">
-      <!-- TODO: 실제값 데이터로 변경 -->
-      <ExpenseRadioChart :actual="{ essential: 60, discretionary: 20, savings: 20 }" />
+      <ExpenseRadioChart :actual="actual" />
     </div>
+
     <div v-else-if="currentTab === 'goal'">
       <TargetRatioChart />
     </div>

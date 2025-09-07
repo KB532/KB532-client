@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
@@ -82,7 +82,7 @@ const Callouts = {
       ctx.lineTo(ex, ey);
       ctx.stroke();
 
-      // 다이아(끄점)
+      // 다이아(끝점)
       ctx.fillStyle = lineColor;
       const d = 3.5;
       ctx.beginPath();
@@ -155,6 +155,21 @@ onMounted(() => {
     plugins: [Callouts],
   });
 });
+
+watch(actualArr, (vals) => {
+  if (!chart) return;
+  chart.data.datasets[0].data = vals;
+  chart.update();
+});
+
+watch(
+  () => props.donutDiameter,
+  (d) => {
+    if (!chart) return;
+    chart.data.datasets[0].radius = Math.max(10, Math.round(d / 2));
+    chart.update();
+  },
+);
 
 onBeforeUnmount(() => chart?.destroy());
 </script>
