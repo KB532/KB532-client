@@ -2,11 +2,11 @@
 import { ref, reactive } from 'vue'
 import RevealOnView from '@/components/common/Effects/RevealOnView.vue'
 
-import GreetingBlock from '@/components/blocks/GreetingBlock.vue'
-import GoalsCard from '@/components/cards/GoalsCard.vue'
-import SettingsGroup from '@/components/sections/SettingsGroup.vue'
-import SettingItemToggle from '@/components/sections/SettingItemToggle.vue'
-import BottomTabBar from '@/components/layout/BottomTabBar.vue'
+import GreetingBlock from '@/components/menu/GreetingBlock.vue'
+import GoalsCard from '@/components/menu/GoalsCard.vue'
+import SettingsGroup from '@/components/menu/SettingsGroup.vue'
+import SettingItemToggle from '@/components/menu/SettingItemToggle.vue'
+import BottomTabBar from '@/components/menu/BottomTabBar.vue'
 
 const username = '안현주'
 const goals = reactive([
@@ -20,10 +20,7 @@ const alarm1 = ref(true)
 const alarm2 = ref(true)
 const alarm3 = ref(true)
 
-const onEditGoals = () => {
-  // TODO: 라우터/모달 연결
-  console.log('목표 수정하기')
-}
+const onEditGoals = () => console.log('목표 수정하기')
 </script>
 
 <template>
@@ -32,7 +29,6 @@ const onEditGoals = () => {
       <header class="topbar">
         <div class="brand">
           <span class="logo-dot" />
-          <span class="logo-text">50/30/20</span>
         </div>
       </header>
 
@@ -61,8 +57,6 @@ const onEditGoals = () => {
 
         <div style="height: 80px" />
       </main>
-
-      <BottomTabBar active="home" @select="tab => console.log('tab:', tab)" />
     </div>
   </div>
 </template>
@@ -77,7 +71,6 @@ const onEditGoals = () => {
   --border: #e9eef5;
 }
 * { box-sizing: border-box; }
-
 .mobile-frame { min-height: 100dvh; display: grid; place-items: center; background: var(--bg); padding: 12px; }
 .screen { width: 100%; max-width: 390px; background: var(--bg); border-radius: 24px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,.08); position: relative; }
 .topbar { height: 56px; display: flex; align-items: center; padding: 0 16px; background: var(--bg); }
