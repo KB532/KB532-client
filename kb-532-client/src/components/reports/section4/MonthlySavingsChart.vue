@@ -150,13 +150,7 @@ function mountChart() {
     layout: { padding: { top: 18, bottom: 10 } },
     plugins: {
       legend: { display: false },
-      tooltip: {
-        enabled: true,
-        callbacks: {
-          title: (items) => items[0].label,
-          label: (item) => `${item.raw}만원`,
-        },
-      },
+      tooltip: false,
     },
     scales: {
       x: {
