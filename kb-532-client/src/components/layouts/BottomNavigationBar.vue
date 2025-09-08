@@ -6,7 +6,7 @@ import { Icon } from '@iconify/vue';
 const route = useRoute();
 
 // TODO: 하단바 숨길 경로 추가
-const HIDDEN_ROUTES = ['/login'];
+const HIDDEN_ROUTES = ['/login', '/welcome', '/signup'];
 
 const isHidden = computed(() => HIDDEN_ROUTES.some((prefix) => route.path.startsWith(prefix)));
 
