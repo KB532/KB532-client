@@ -16,7 +16,7 @@ const username = '오삼이';
   <div class="max-w-md mx-auto">
     <section class="px-4 pt-12 pb-4 text-center">
       <p class="subtitle2 tracking-tight">
-        532가 <span class="subtitle2 text-yellow-400">{{ username }}</span
+        <span class="subtitle2 text-kb-yellow-positive">{{ username }}</span
         >님의
       </p>
       <h1 class="mt-1 title2 leading-snug">
