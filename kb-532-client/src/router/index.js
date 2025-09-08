@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue';
 import aiCoaching from './modules/ai-coaching';
 import menu from './modules/menu';
 import reports from './modules/reports';
+import auth from './modules/auth';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,6 +17,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
+    ...auth,
     ...reports,
     ...aiCoaching.map((r) => ({
       ...r,

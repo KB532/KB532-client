@@ -4,7 +4,7 @@
     :disabled="props.disabled"
     @click="onClick"
     :class="[
-      'button2',
+      props.textStyle,
       'rounded-lg bg-kb-gray text-white',
       'px-4 py-1.5 inline-flex items-center justify-center',
       'transition-colors duration-150 focus:outline-none',
@@ -22,6 +22,7 @@ const props = defineProps({
   type: { type: String, default: 'button' }, // 'button' | 'submit' | 'reset'
   disabled: { type: Boolean, default: false },
   block: { type: Boolean, default: false },   // true면 가로 100%
+  textStyle: { type: String, default: 'button2' },
 })
 const emit = defineEmits(['click'])
 const onClick = (e) => { if (!props.disabled) emit('click', e) }
