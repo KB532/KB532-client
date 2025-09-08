@@ -1,0 +1,1 @@
+<template>account-success</template>

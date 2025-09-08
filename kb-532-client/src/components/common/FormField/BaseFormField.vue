@@ -17,11 +17,14 @@
         :value="displayValue"
         @input="onInput"
         @focus="focused = true"
-        @blur="focused = false; $emit('blur')"
+        @blur="
+          focused = false;
+          $emit('blur');
+        "
         :disabled="disabled"
       />
-      <!-- rrn은 길이 제한을 attribute로 걸지 않고 onInput에서 제어 -->
     </div>
+    <p v-if="error" class="caption3 text-kb-yellow-positive mt-1">{{ error }}</p>
   </div>
 </template>
 
@@ -38,11 +41,9 @@ const props = defineProps({
   error: String,
   required: Boolean,
   disabled: Boolean,
-  // UX 보조
   autocomplete: { type: String, default: 'off' },
   inputmode: String,
   maxlength: Number,
-  // 간단 필터/마스킹
   numericOnly: Boolean,
   mask: String, // 'rrn' | 'tel'
   displayMask: String, // 'rrn' (표시용 마스킹)
@@ -57,22 +58,20 @@ const inputMaxlength = computed(() => {
   return props.maxlength;
 });
 
-// 숫자만 남기기
 const onlyDigits = (v) => String(v ?? '').replace(/\D/g, '');
 
-// 표시용 포맷
 function formatByMask(digits, mask) {
   const d = onlyDigits(digits);
 
   if (mask === 'rrn') {
-    const capped = d.slice(0, 13); // 최대 13자리
+    const capped = d.slice(0, 13);
     const front = capped.slice(0, 6);
     const back = capped.slice(6);
     return back ? `${front}-${back}` : front;
   }
 
   if (mask === 'tel') {
-    const capped = d.slice(0, 11); // 국내 기준 11자리
+    const capped = d.slice(0, 11);
     if (capped.startsWith('02')) {
       const rest = capped.slice(2);
       if (rest.length <= 3) return `02-${rest}`;
@@ -90,7 +89,7 @@ function formatByMask(digits, mask) {
   return d;
 }
 
-// 주민번호 표시용(뒷자리 • 처리)
+// 주민번호 표시용
 function maskRrnDisplay(formatted) {
   const [front, back] = String(formatted).split('-');
   if (!back) return formatted;
@@ -99,24 +98,19 @@ function maskRrnDisplay(formatted) {
   return `${front}-${first}${maskedTail}`;
 }
 
-// 화면 표시값: modelValue(숫자만)를 포맷/마스킹
 const displayValue = computed(() => {
-  // 마스킹 필드는 포맷팅된 값을 표시
   if (props.mask) {
     const rawDigits = onlyDigits(props.modelValue);
     let v = formatByMask(rawDigits, props.mask);
     if (props.displayMask === 'rrn' && !focused.value) v = maskRrnDisplay(v);
     return v;
   }
-  // 일반 필드는 modelValue 그대로 표시
   return props.modelValue;
 });
 
-// 입력 이벤트: 항상 숫자만을 모델로 emit (길이 제한도 여기서)
 function onInput(e) {
   let valueToEmit = e.target.value ?? '';
 
-  // 마스크가 지정된 경우, 숫자만 추출하고 길이를 제한합니다.
   if (props.mask) {
     let digits = onlyDigits(valueToEmit);
     if (props.mask === 'rrn') {
@@ -125,9 +119,7 @@ function onInput(e) {
       digits = digits.slice(0, 11);
     }
     valueToEmit = digits;
-  } 
-  // 마스크가 없는 일반 필드의 경우, maxlength만 적용합니다.
-  else if (props.maxlength) {
+  } else if (props.maxlength) {
     valueToEmit = valueToEmit.slice(0, props.maxlength);
   }
 

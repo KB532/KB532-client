@@ -3,6 +3,9 @@ export default {
   content: ['index.html', 'src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+
       black: '#282725',
       white: '#FEFEFE',
       gray: {
@@ -50,6 +53,14 @@ export default {
       boxShadow: {
         'bottom-navbar-shadow': '0 -2px 4px rgba(0,0,0,0.06)',
         'drop-shadow': '0 4px 6px rgba(0, 0, 0, 0.06)',
+      },
+      keyframes: {
+        spin: {
+          to: { transform: 'rotate(360deg)' },
+        },
+      },
+      animation: {
+        spin: 'spin 1s linear infinite',
       },
     },
   },

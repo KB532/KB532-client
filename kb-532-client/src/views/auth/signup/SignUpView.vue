@@ -24,15 +24,13 @@ const errors = computed(() => ({
       : '비밀번호가 일치하지 않습니다.',
 }));
 
-const isPristine = computed(() => Object.values(form.value).every((v) => v === ''));
 const isFormInvalid = computed(() => Object.values(errors.value).some(Boolean));
-const firstError = computed(() => Object.values(errors.value).find(Boolean));
 
 function submit() {
   if (isFormInvalid.value) return;
   // TODO: 실제 회원가입 정보 저장 로직 (e.g. Pinia store or API call)
   console.log('가입 정보:', form.value);
-  router.push('/account');
+  router.push('/signup-success');
 }
 </script>
 <template>
@@ -96,11 +94,8 @@ function submit() {
     </div>
 
     <div class="pb-10">
-      <p v-if="!isPristine && firstError" class="caption3 text-red-200 text-center mb-2">
-        ※ {{ firstError }}
-      </p>
       <DarkButton block class="h-12" text-style="button1" @click="submit" :disabled="isFormInvalid">
-        다음
+        회원 가입
       </DarkButton>
     </div>
   </div>
