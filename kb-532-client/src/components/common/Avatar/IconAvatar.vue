@@ -5,9 +5,7 @@ const props = defineProps({
   category: String,
   /** 배경(회색 원) 표시 여부 — 기본 true */
   bg: { type: Boolean, default: true },
-  /** 아이콘 크기 Tailwind 클래스 */
   size: { type: String, default: 'size-6' },
-  /** 배경이 있을 때만 적용할 패딩 클래스 */
   padding: { type: String, default: 'p-1.5' },
 });
 
