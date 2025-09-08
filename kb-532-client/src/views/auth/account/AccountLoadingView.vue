@@ -4,12 +4,22 @@
       <img src="@/assets/logo/532LOGO.svg" alt="532 Logo" class="w-32 h-auto mb-2" />
       <h1 class="title3 mb-4">계좌를 연동하고 있습니다...</h1>
 
-      <!-- 토스 느낌 스피너 -->
       <BaseSpinner :size="40" color="#FFBC00" />
     </div>
   </div>
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import BaseSpinner from '@/components/common/Spinner/BaseSpinner.vue';
+
+const router = useRouter();
+
+// TODO: 임의로 5초 후 성공페이지로 가게 해놓음!
+onMounted(() => {
+  setTimeout(() => {
+    router.push('/account-success');
+  }, 5000);
+});
 </script>

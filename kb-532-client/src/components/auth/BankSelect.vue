@@ -29,7 +29,6 @@ function onKeyToggle(e) {
   }
 }
 
-// 외부 클릭 시 닫기
 function onDocClick(e) {
   const container = document.getElementById('bank-select');
   if (container && !container.contains(e.target)) {

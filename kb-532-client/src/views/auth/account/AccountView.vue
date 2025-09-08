@@ -1,11 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import BankSelect from '@/components/auth/BankSelect.vue';
-import BaseFormField from '@/components/common/FormField/BaseFormField.vue';
+import AccountInputForm from '@/components/auth/account/AccountInputForm.vue';
 import DarkButton from '@/components/common/Button/DarkButton.vue';
 
 const router = useRouter();
+
 const form = ref({ bank: '', bankId: '', password: '' });
 
 const errors = computed(() => ({
@@ -25,29 +25,16 @@ function submit() {
 
 <template>
   <div class="flex flex-col h-screen overflow-hidden">
-    <div class="flex-1 overflow-y-auto pt-10 px-0">
-      <h1 class="title3 mb-8">
+    <div class="pt-28">
+      <h1 class="title3">
         실제 은행에서 사용하는 <br />
         <span class="text-kb-yellow-positive">아이디/비밀번호</span>를 입력해주세요
       </h1>
+    </div>
 
-      <div class="space-y-6">
-        <BankSelect v-model="form.bank" :error="errors.bank" />
-
-        <BaseFormField
-          v-model="form.bankId"
-          label="은행 ID"
-          placeholder="은행 ID를 입력해주세요"
-          :error="errors.bankId"
-        />
-
-        <BaseFormField
-          v-model="form.password"
-          label="은행 비밀번호"
-          type="password"
-          placeholder="은행 비밀번호를 입력해주세요"
-          :error="errors.password"
-        />
+    <div class="flex-1 flex items-center justify-center">
+      <div class="w-full max-w-xs">
+        <AccountInputForm v-model:form="form" :errors="errors" @submit="submit" />
       </div>
     </div>
 

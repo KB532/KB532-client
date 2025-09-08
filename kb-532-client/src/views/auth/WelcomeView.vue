@@ -2,8 +2,11 @@
   <div class="flex flex-col h-screen px-6 overflow-hidden">
     <div class="flex-1 flex flex-col items-center justify-center">
       <img src="@/assets/logo/532LOGO.svg" alt="532 Logo" class="w-32 h-auto mb-2" />
-      <h1 class="title3">오삼이</h1>
-      <p class="body2 text-kb-gray-dark mt-1">서브 멘트 받아서 넣기...</p>
+      <h1 class="title3">오삼이 : 월급 삼등분</h1>
+      <p class="body2 text-kb-gray-dark mt-1 text-center">
+        50·30·20 황금비율로<br />
+        지출과 저축을 한눈에
+      </p>
     </div>
 
     <div class="pb-10">
