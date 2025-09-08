@@ -53,10 +53,10 @@ const onEditGoals = () => router.push({ name: 'goal-edit' })
         </RevealOnView>
 
         <RevealOnView :delay="180">
-          <SettingsGroup title="## 설정">
-            <SettingItemToggle label="알람 여부" v-model="alarm1" />
-            <SettingItemToggle label="알람 여부" v-model="alarm2" />
-            <SettingItemToggle label="알람 여부" v-model="alarm3" />
+          <SettingsGroup title="환경 설정">
+            <SettingItemToggle label="간편 로그인" v-model="alarm1" />
+            <SettingItemToggle label="간편 모드" v-model="alarm2" />
+            <SettingItemToggle label="다크모드" v-model="alarm3" />
           </SettingsGroup>
         </RevealOnView>
 
