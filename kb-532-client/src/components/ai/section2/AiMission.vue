@@ -12,7 +12,7 @@ defineProps({
     class="flex min-h-[473px] flex-col items-center justify-center px-6 pt-24 text-center [background:linear-gradient(180deg,#FFFFFF_15%,rgba(255,188,0,0.6)_100%)]"
   >
     <p class="subtitle2">
-      그래서 <span class="subtitle2 text-yellow-400">{{ username }}</span
+      그래서 <span class="subtitle2 text-kb-yellow-positive">{{ username }}</span
       >님이
     </p>
     <h2 class="mt-1 title2 leading-snug text-gray-900">

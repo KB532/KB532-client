@@ -25,7 +25,7 @@ const onSubmit = () => {
 
     <DarkCard>
       <div class="flex items-start gap-2">
-        <span class="subtitle2 text-yellow-400">TIP</span>
+        <span class="subtitle2 text-kb-yellow-positive">TIP</span>
         <div class="space-y-1">
           <p class="body2">궁금한 자산관리 방법을 자세히 질문해봐</p>
           <ul class="list-disc break-words pt-3 space-y-1 text-kb-gray caption2">

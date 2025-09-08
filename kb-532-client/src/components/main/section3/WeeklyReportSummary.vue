@@ -3,6 +3,7 @@ import BaseCard from '@/components/common/Card/BaseCard.vue';
 import Chip from '@/components/common/Chip/BaseChip.vue';
 import SummaryChipGroup from './SummaryChipGroup.vue';
 import { Icon } from '@iconify/vue';
+import { useRouter } from 'vue-router';
 
 // TODO: 실제 API 데이터로 교체
 const summaryData = {
@@ -15,6 +16,11 @@ const summaryData = {
   diningRisePercent: 15,
   cafeTargetPerWeek: 3,
 };
+
+const router = useRouter();
+const goReports = () => {
+  router.push('/reports');
+};
 </script>
 
 <template>
@@ -22,23 +28,27 @@ const summaryData = {
     <div class="w-full">
       <div class="flex items-center justify-between mb-3">
         <p class="subtitle2">주간 리포트 요약</p>
-        <!-- TODO: 버튼 클릭 시 동작 정의 -->
-        <Chip size="small" variant="outline" class="shrink-0 whitespace-nowrap">
+        <Chip
+          size="small"
+          variant="outline"
+          class="shrink-0 whitespace-nowrap cursor-pointer"
+          @click="goReports"
+        >
           전체 리포트 보기
           <Icon icon="material-symbols:chevron-right" class="w-4 h-auto text-kb-gray-dark" />
         </Chip>
       </div>
       <SummaryChipGroup :data="summaryData">
         <!-- success -->
-        <template #success="{ data }"
-          >{{ data.categories.shopping.label }} 지출이 지난주보다 {{ data.shoppingDropPercent }}%
+        <template #success="{ data }">
+          {{ data.categories.shopping.label }} 지출이 지난주보다 {{ data.shoppingDropPercent }}%
           줄었습니다.
         </template>
 
         <!-- warning -->
         <template #warning="{ data }">
-          {{ data.categories.dining.label }}
-          가 지난주보다 {{ data.diningRisePercent }}% 증가했습니다.
+          {{ data.categories.dining.label }}가 지난주보다 {{ data.diningRisePercent }}%
+          증가했습니다.
         </template>
 
         <!-- recommend -->
