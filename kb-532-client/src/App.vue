@@ -25,7 +25,7 @@ watch(answered, (newVal) => {
 <template>
   <div class="flex flex-col min-h-screen">
     <TopAppBar class="fixed inset-x-0 top-0 bg-white z-10" />
-    <main :class="['flex-1 pt-14 pb-[80px]', pageBgClass]">
+    <main :class="['flex-1 pt-14 pb-[80px] w-full max-w-[375px] mx-auto', pageBgClass]">
       <div class="p-0">
         <RouterView />
         <ToastNotification />
