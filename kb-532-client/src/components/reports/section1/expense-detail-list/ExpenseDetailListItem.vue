@@ -1,6 +1,6 @@
 <script setup>
 import CategoryIcon from '@/components/common/Avatar/IconAvatar.vue';
-import { numberWithCommas } from "@/assets/utils/index.js";
+import { numberWithCommas } from '@/assets/utils/index.js';
 
 const props = defineProps({
   category: String,
@@ -18,8 +18,9 @@ const categoryLabels = {
   home: '주거·통신',
   living: '생활',
   snacks: '카페·간식',
-  others: '기타 지출'
-}
+  others: '기타 지출',
+  unclassified: '미분류',
+};
 </script>
 
 <template>
