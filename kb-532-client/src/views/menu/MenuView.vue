@@ -1,5 +1,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { goals } from '@/stores/goals'
 import RevealOnView from '@/components/common/Effects/RevealOnView.vue'
 
 import GreetingBlock from '@/components/menu/GreetingBlock.vue'
@@ -7,19 +9,23 @@ import GoalsCard from '@/components/menu/GoalsCard.vue'
 import SettingsGroup from '@/components/menu/SettingsGroup.vue'
 import SettingItemToggle from '@/components/menu/SettingItemToggle.vue'
 
+const router = useRouter()
+
+
 const username = '오삼이'
-const goals = reactive([
-  { label: '필수', value: 50, color: '#4C80F1' },
-  { label: '선택', value: 30, color: '#F16E5B' },
-  { label: '저축', value: 20, color: '#FF9F43' },
-])
+// const goals = reactive([
+//   { label: '필수', value: 50, color: '#4C80F1' },
+//   { label: '선택', value: 30, color: '#F16E5B' },
+//   { label: '저축', value: 20, color: '#FF9F43' },
+// ])
 
 const alarmMain = ref(true)
 const alarm1 = ref(true)
 const alarm2 = ref(true)
 const alarm3 = ref(true)
 
-const onEditGoals = () => console.log('목표 수정하기')
+// const onEditGoals = () => console.log('목표 수정하기')
+const onEditGoals = () => router.push({ name: 'goal-edit' })
 </script>
 
 <template>
