@@ -28,8 +28,6 @@ export async function getWeeklySpending({ weeks = 5 } = {}) {
 }
 
 // monthly
-
-// 표준 키
 const KEY = {
   shopping: 'shopping',
   finance: 'finance',
@@ -44,7 +42,6 @@ const KEY = {
   unclassified: 'unclassified',
 };
 
-// 한글 → 내부키 매핑 (여러 변형을 커버)
 function mapKorToKey(raw = '') {
   const s = String(raw)
     .trim()
@@ -61,7 +58,6 @@ function mapKorToKey(raw = '') {
   if (s === '생활') return KEY.living;
   if (s === '카페·간식' || s === '카페/간식') return KEY.snacks;
 
-  // 분리 처리
   if (s === '기타지출' || s === '기타·지출' || s === '기타') return KEY.others;
   if (s === '미분류') return KEY.unclassified;
 
@@ -81,7 +77,7 @@ export async function getMonthlySpending({ month }) {
     _i: idx,
   }));
 
-  // 정렬: 기타지출(others) → 미분류(unclassified)를 맨 뒤에
+  // 정렬
   categories.sort((a, b) => {
     const order = {
       shopping: 0,
@@ -94,7 +90,7 @@ export async function getMonthlySpending({ month }) {
       living: 0,
       snacks: 0,
       others: 1, // 기타지출
-      unclassified: 2, // 미분류 (더 아래)
+      unclassified: 2, // 미분류
     };
     return (order[a.key] ?? 0) - (order[b.key] ?? 0);
   });

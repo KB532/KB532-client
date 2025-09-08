@@ -27,8 +27,6 @@ onMounted(async () => {
   <BaseCard>
     <h1 class="subtitle1">일주일에 평균 {{ averageSpending }}만원을 써요</h1>
 
-    <div v-if="loading" class="caption2 text-gray-500 mt-2">불러오는 중…</div>
-    <div v-else-if="error" class="caption2 text-red-500 mt-2">{{ error }}</div>
-    <WeeklySpendingChart v-else :weeks="weeks" />
+    <WeeklySpendingChart :weeks="weeks" />
   </BaseCard>
 </template>
