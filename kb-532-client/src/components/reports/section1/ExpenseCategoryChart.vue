@@ -1,69 +1,83 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { Icon } from '@iconify/vue';
-import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js'
+import { ref, onMounted, watch, onBeforeUnmount, computed } from 'vue';
+import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
+import IconAvatar from '@/components/common/Avatar/IconAvatar.vue';
 
-Chart.register(DoughnutController, ArcElement, Tooltip, Legend)
+Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
-const chartCanvas = ref(null)
-let chartInstance = null
+const props = defineProps({
+  categories: { type: Array, default: () => [] },
+});
 
-onMounted(() => {
+const chartCanvas = ref(null);
+let chartInstance = null;
+
+const COLOR_BY_KEY = {
+  shopping: '#00DE5A',
+  finance: '#A180FF',
+  food: '#FFC831',
+  transfer: '#467CAA',
+  transit: '#4AC9FF',
+  health: '#FF5882',
+  home: '#2EA923',
+  living: '#FF9A42',
+  snacks: '#B066FF',
+  others: '#8F8F8F',
+};
+
+function drawChart() {
+  if (!chartCanvas.value) return;
+
+  const labels = props.categories.map((c) => c.label);
+  const percents = props.categories.map((c) => Number(c.percent) || 0);
+  const colors = props.categories.map((c) => COLOR_BY_KEY[c.key] || COLOR_BY_KEY.others);
+
   if (chartInstance) {
-    chartInstance.destroy()
+    chartInstance.destroy();
+    chartInstance = null;
   }
 
   chartInstance = new Chart(chartCanvas.value, {
     type: 'doughnut',
     data: {
-      labels: ['쇼핑', '보험·대출·기타금융', '식비', '이체', '교퉁', '의료·건강·피트니스', '주거·통신', '생활', '카페·간식', '기타 지출'],
-      datasets: [
-        {
-          data: [26, 22, 19, 17, 11, 2, 2, 1, 0, 0],
-          backgroundColor: [ // 나중에 색깔 바꾸기... 좀 못생김 ㅠ
-            '#00DE5A',
-            '#A180FF',
-            '#FFC831',
-            '#467CAA',
-            '#4AC9FF',
-            '#FF5882',
-            '#2EA923',
-            '#FF9A42',
-            '#B066FF',
-            '#8F8F8F',
-          ],
-          borderWidth: 0,
-        },
-      ],
+      labels,
+      datasets: [{ data: percents, backgroundColor: colors, borderWidth: 0 }],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       cutout: '70%',
+      animation: false,
       plugins: {
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          enabled: true,
-        },
+        legend: { display: false },
+        tooltip: { enabled: true },
       },
     },
-  })
-})
+  });
+}
+
+onMounted(drawChart);
+watch(() => props.categories, drawChart, { deep: true });
+onBeforeUnmount(() => {
+  if (chartInstance) chartInstance.destroy();
+});
+
+const topCategory = computed(() => {
+  if (!props.categories.length) return null;
+  return props.categories.reduce((max, cur) => (cur.percent > max.percent ? cur : max));
+});
+const topPercentText = computed(() =>
+  topCategory.value ? `${Math.round(topCategory.value.percent)}%` : '',
+);
 </script>
 
 <template>
   <div class="relative size-40">
     <canvas ref="chartCanvas"></canvas>
 
-<!--    Todo: 가장 값이 큰 데이터가 뜰 수 있도록 바인딩하기-->
     <div class="absolute inset-0 flex flex-col items-center justify-center">
-      <Icon
-        icon="mdi:shopping"
-        class="text-[#00DE5A] size-7"
-      />
-      <span class="title2 text-black">26%</span>
+      <IconAvatar v-if="topCategory" :category="topCategory.key" :bg="false" size="size-7" />
+      <span class="title2 text-black">{{ topPercentText }}</span>
     </div>
   </div>
 </template>
