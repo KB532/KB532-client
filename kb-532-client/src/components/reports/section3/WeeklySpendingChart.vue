@@ -137,12 +137,7 @@ function draw() {
 
       plugins: {
         legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: (ctx) => ` ${formatKoreanMoneyShort(ctx.raw)}`,
-          },
-          displayColors: false,
-        },
+        tooltip: false,
       },
 
       scales: {

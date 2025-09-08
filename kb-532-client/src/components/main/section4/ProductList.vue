@@ -58,10 +58,9 @@ watch(
   { immediate: true },
 );
 
-// TODO: 추후 모달 열기 또는 페이지 이동(router.push) 로직 추가
-
 const onItemClick = () => {
-  alert('😍');
+  window.location.href =
+    'https://obank.kbstar.com/quics?page=C016613&cc=b061496:b061645&isNew=Y&prcode=DP01001510#loading';
 };
 </script>
 
