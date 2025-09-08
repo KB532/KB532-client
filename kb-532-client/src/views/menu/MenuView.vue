@@ -6,13 +6,12 @@ import GreetingBlock from '@/components/menu/GreetingBlock.vue'
 import GoalsCard from '@/components/menu/GoalsCard.vue'
 import SettingsGroup from '@/components/menu/SettingsGroup.vue'
 import SettingItemToggle from '@/components/menu/SettingItemToggle.vue'
-import BottomTabBar from '@/components/menu/BottomTabBar.vue'
 
-const username = '안현주'
+const username = '오삼이'
 const goals = reactive([
   { label: '필수', value: 50, color: '#4C80F1' },
-  { label: '선택', value: 30, color: '#FF9F43' },
-  { label: '저축', value: 20, color: '#F16E5B' },
+  { label: '선택', value: 30, color: '#F16E5B' },
+  { label: '저축', value: 20, color: '#FF9F43' },
 ])
 
 const alarmMain = ref(true)
