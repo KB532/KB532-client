@@ -11,6 +11,6 @@ import RevealOnView from '@/components/common/Effects/RevealOnView.vue';
 
     <RevealOnView :delay="100"><SpendingInsightCard /></RevealOnView>
     <RevealOnView :delay="200"><WeeklySpendingMain /></RevealOnView>
-    <RevealOnView :delay="300"><MonthlySavingsMain /></RevealOnView>
+    <RevealOnView :delay="0"><MonthlySavingsMain /></RevealOnView>
   </div>
 </template>
