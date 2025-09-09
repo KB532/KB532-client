@@ -1,19 +1,15 @@
 <script setup>
-const props = defineProps({
-  username: { type: String, required: true }
-})
-const emit = defineEmits(['profile'])
+defineProps({
+  username: { type: String, required: true },
+});
 </script>
 
 <template>
-  <section class="greeting">
-    <p class="hello"><strong>{{ username }}</strong>님 반갑습니다.</p>
-    <button class="link" @click="$emit('profile')">프로필 설정</button>
+  <section class="p-4">
+    <h1 class="body2">
+      <span class="title2">{{ username }}</span
+      >님, 반갑습니다.
+    </h1>
+    <button class="caption3 underline mt-1 ml-1" @click="$emit('profile')">프로필 설정</button>
   </section>
 </template>
-
-<style scoped>
-.greeting { margin: 6px 0 14px; }
-.hello { font-size: 20px; margin: 0 0 6px; }
-.link { background: transparent; border: 0; padding: 0; color: var(--muted); text-decoration: underline; font-size: 13px; cursor: pointer; }
-</style>
