@@ -8,6 +8,7 @@ import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.
 const listRef = ref(null);
 const isAtBottom = ref(false);
 const isModalOpen = ref(false);
+const currentItem = ref(null);
 
 const handleScroll = () => {
   const el = listRef.value;
@@ -15,7 +16,8 @@ const handleScroll = () => {
   isAtBottom.value = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
 };
 
-const handleClickItem = () => {
+const handleClickItem = (item) => {
+  currentItem.value = item;
   isModalOpen.value = true;
 }
 
@@ -71,10 +73,10 @@ const data = [
         :name="item.name"
         :date="item.date"
         :amount="item.amount"
-        @click="handleClickItem"
+        @click="handleClickItem(item)"
       />
     </div>
     <ScrollFadeOverlay :isAtBottom="isAtBottom" />
-    <ExpenseDetailModal v-model="isModalOpen" />
+    <ExpenseDetailModal v-model="isModalOpen" :data="currentItem" />
   </BaseCard>
 </template>
