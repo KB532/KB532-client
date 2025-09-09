@@ -14,7 +14,8 @@ const currentTab = ref('spending');
 
 const loading = ref(false);
 const error = ref('');
-const actual = ref({ essential: 0, discretionary: 0, savings: 0 });
+const actual = ref({ essential: 50, discretionary: 30, savings: 20 });
+const target = ref({ essential: 50, discretionary: 30, savings: 20 });
 
 const pct = (v) => Math.round(Number(v || 0) * 100);
 
@@ -23,12 +24,23 @@ async function load() {
   error.value = '';
   try {
     const data = await getBudgetSummary();
-    const r = data?.data?.actual || {};
+
+    const a = data?.data?.actual || data?.actual || {};
     actual.value = {
-      essential: pct(r.essential),
-      discretionary: pct(r.discretionary),
-      savings: pct(r.savings),
+      essential: pct(a.essential),
+      discretionary: pct(a.discretionary),
+      savings: pct(a.savings),
     };
+
+    const t = data?.data?.target || data?.data?.goal || data?.target || data?.goal || {};
+    const toPct = (x) => (x <= 1 ? Math.round(Number(x || 0) * 100) : Math.round(Number(x || 0)));
+    if (Object.keys(t).length) {
+      target.value = {
+        essential: toPct(t.essential ?? 50),
+        discretionary: toPct(t.discretionary ?? 30),
+        savings: toPct(t.savings ?? 20),
+      };
+    }
   } catch (e) {
     error.value = e.message || '불러오기 실패';
   } finally {
@@ -48,7 +60,9 @@ onMounted(load);
     </div>
 
     <div v-else-if="currentTab === 'goal'">
-      <TargetRatioChart />
+      <TargetRatioChart :actual="actual" :target="target" />
     </div>
+
+    <p v-if="error" class="mt-2 text-red-500 body2">{{ error }}</p>
   </div>
 </template>

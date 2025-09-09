@@ -1,10 +1,8 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
+import { goals } from '@/stores/goals';
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
-
-// TODO: 목표 동적 설정
-const TARGET = { essential: 50, discretionary: 30, savings: 20 };
 
 // 글자 크기/굵기
 const CAPTION3_PX = 11;
@@ -31,8 +29,8 @@ const actualArr = computed(() => [
   props.actual.discretionary,
   props.actual.savings,
 ]);
-const targetArr = [TARGET.essential, TARGET.discretionary, TARGET.savings];
-const deltas = computed(() => actualArr.value.map((v, i) => v - targetArr[i]));
+const targetArr = computed(() => goals.map((g) => g.value));
+const deltas = computed(() => actualArr.value.map((v, i) => v - targetArr.value[i]));
 
 const chartRef = ref(null);
 let chart;
@@ -159,6 +157,11 @@ onMounted(() => {
 watch(actualArr, (vals) => {
   if (!chart) return;
   chart.data.datasets[0].data = vals;
+  chart.update();
+});
+
+watch(targetArr, () => {
+  if (!chart) return;
   chart.update();
 });
 

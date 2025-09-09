@@ -15,7 +15,7 @@ import RevealOnView from '@/components/common/Effects/RevealOnView.vue';
       <AiListMock />
     </RevealOnView>
 
-    <RevealOnView :delay="200">
+    <RevealOnView :delay="0">
       <AiAskContainer />
     </RevealOnView>
   </div>

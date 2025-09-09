@@ -20,7 +20,7 @@ import RevealOnView from '@/components/common/Effects/RevealOnView.vue';
       <WeeklyReportSummary />
     </RevealOnView>
 
-    <RevealOnView :delay="300">
+    <RevealOnView :delay="0">
       <PopularProducts />
     </RevealOnView>
   </div>
