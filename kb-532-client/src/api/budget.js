@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// summary
 function defaultMonthRange(date = new Date()) {
   const y = date.getFullYear();
   const m = date.getMonth();
@@ -17,6 +18,41 @@ export async function getBudgetSummary(params = {}) {
   } catch (err) {
     const msg =
       err.response?.data?.error?.message || `HTTP ${err.response?.status || ''}` || err.message;
+    throw new Error(msg);
+  }
+}
+
+// target
+function formatLocalDate(d = new Date()) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+export async function saveBudgetTargets({ essential, discretionary, savings }) {
+  const E = +(Number(essential) / 100).toFixed(4);
+  const D = +(Number(discretionary) / 100).toFixed(4);
+  const S = +(Number(savings) / 100).toFixed(4);
+
+  const payload = {
+    effectiveFrom: formatLocalDate(),
+    ESSENTIAL: E,
+    DISCRETIONARY: D,
+    SAVINGS: S,
+  };
+
+  try {
+    const { data } = await axios.post('/api/budget/targets', payload, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return data;
+  } catch (err) {
+    console.error('POST /budget/targets 실패:', err.response?.status, err.response?.data);
+    const msg =
+      err.response?.data?.error?.message ||
+      err.response?.data?.message ||
+      `HTTP ${err.response?.status || ''}`;
     throw new Error(msg);
   }
 }
