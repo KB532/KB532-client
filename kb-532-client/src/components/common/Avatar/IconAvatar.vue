@@ -20,11 +20,11 @@ const categoryIcon = {
   living: { icon: 'icon-park-solid:shopping', color: 'text-[#FF9A42]' },
   snacks: { icon: 'jam:coffee-cup-f', color: 'text-[#B066FF]' },
   others: { icon: 'codex:etc-horisontal', color: 'text-gray-600' },
-  unclassified: { icon: 'mdi:help', color: 'text-red-200' },
+  unclassified: { icon: 'material-symbols:question-mark-rounded', color: 'text-red-200' },
 };
 
 const currentCategory = categoryIcon[props.category] || {
-  icon: 'codex:etc-horisontal',
+  icon: 'material-symbols:question-mark-rounded',
   color: 'text-gray-600',
 };
 </script>
