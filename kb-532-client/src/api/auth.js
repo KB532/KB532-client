@@ -20,6 +20,7 @@ export const toPhone = (phone) => {
   return d.replace(/^(\d{3})(\d{3,4})(\d{4}).*$/, '$1-$2-$3')
 }
 
+// 회원가입
 export async function signup({ name, rrn, phone, password }) {
   const payload = {
     name: String(name || '').trim(),
@@ -31,4 +32,27 @@ export async function signup({ name, rrn, phone, password }) {
     headers: { 'Content-Type': 'application/json' },
   })
   return data
+}
+
+// 로그인
+export async function login({ phone, password }) {
+  const payload = {
+    phone: toPhone(phone),              // 예: "010-1234-5678" 형태로 맞춤
+    password: String(password || ''),
+  }
+  try {
+    const { data } = await axios.post('/api/auth/login', payload, {
+      headers: { 'Content-Type': 'application/json' },
+    })
+    return data
+  } catch (err) {
+    const res = err.response
+    const serverMsg =
+      res?.data?.error?.message ||
+      res?.data?.message ||
+      res?.data?.detail ||
+      res?.data?.error ||
+      `HTTP ${res?.status}`
+    throw new Error(serverMsg)
+  }
 }
