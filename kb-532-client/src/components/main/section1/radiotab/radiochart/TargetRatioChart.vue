@@ -4,7 +4,6 @@ import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js
 import { goals } from '@/stores/goals';
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
-// 글자 크기/굵기
 const CAPTION3_PX = 11;
 const CAPTION_WEIGHT = 500;
 
@@ -16,7 +15,6 @@ const props = defineProps({
   donutDiameter: { type: Number, default: 120 },
 });
 
-/** 데이터/색 */
 const labels = ['필수 지출', '자유 지출', '저축'];
 const colors = ['#48637E', '#FFC831', '#C0E2FF']; // 도넛 색
 const textGray = '#60584C';
@@ -41,7 +39,6 @@ function isRight(a) {
   return x > -Math.PI / 2 && x < Math.PI / 2;
 }
 
-/** 수평 라인 + 다이아(끝점) + 두 줄 텍스트 */
 const Callouts = {
   id: 'callouts',
   afterDatasetsDraw(c) {
@@ -50,7 +47,7 @@ const Callouts = {
     const yJitter = [0, 14, -12];
 
     ctx.save();
-    ctx.lineWidth = 1; // 수평선 굵기
+    ctx.lineWidth = 1;
     ctx.strokeStyle = lineColor;
     ctx.fillStyle = lineColor;
 
@@ -71,13 +68,11 @@ const Callouts = {
       const ex = sx + (right ? lineLen : -lineLen);
       const ey = sy;
 
-      // 수평선
       ctx.beginPath();
       ctx.moveTo(sx, sy);
       ctx.lineTo(ex, ey);
       ctx.stroke();
 
-      // 다이아(끝점)
       ctx.fillStyle = lineColor;
       const d = 3.5;
       ctx.beginPath();
@@ -95,10 +90,8 @@ const Callouts = {
       const name = labels[i];
       const val = actualArr.value[i];
 
-      // 수평선을 기준으로 텍스트 정렬
       ctx.textAlign = right ? 'right' : 'left';
 
-      // 1줄: 항목 + 현재값
       ctx.textBaseline = 'middle';
       ctx.fillStyle = textGray;
       ctx.font = `${CAPTION_WEIGHT} ${CAPTION3_PX}px 'Spoqa Han Sans Neo', sans-serif`;
@@ -128,7 +121,7 @@ onMounted(() => {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      rotation: -90 * (Math.PI / 180), // 시작점 : 12시
+      rotation: -90 * (Math.PI / 180),
       layout: { padding: 28 },
       plugins: {
         legend: { display: false },

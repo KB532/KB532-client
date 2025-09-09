@@ -8,8 +8,8 @@ const formatKRWShort = (won) => {
   const man = won / 10000;
   return Number.isInteger(man) ? `${man.toLocaleString('ko-KR')}만원` : `${man.toFixed(1)}만원`;
 };
-const signClass = (p) => (p > 0 ? 'text-red-200' : 'text-kb-gray-dark');
-const signArrow = (p) => (p > 0 ? '↑' : '–');
+const signClass = (p) => (p > 0 ? 'text-red-200' : 'text-blue-200');
+const signArrow = (p) => (p > 0 ? '↑' : '↓');
 </script>
 
 <template>
@@ -23,7 +23,7 @@ const signArrow = (p) => (p > 0 ? '↑' : '–');
         class="w-[96px] h-[68px] rounded-lg bg-[#F8F8F8] px-3 py-2 text-center"
       >
         <!-- 카테고리명 -->
-        <p class="caption3 text-black">{{ it.label }}</p>
+        <p class="caption3 text-black truncate">{{ it.label }}</p>
 
         <!-- 금액 -->
         <p class="caption1 mt-0.5 leading-tight" :class="signClass(it.deltaPercent)">
