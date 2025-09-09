@@ -1,26 +1,40 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import Chip from '@/components/common/Chip/BaseChip.vue';
 import SummaryChipGroup from './SummaryChipGroup.vue';
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
-
-// TODO: 실제 API 데이터로 교체
-const summaryData = {
-  categories: {
-    shopping: { label: '쇼핑', icon: 'mdi:cart-outline' },
-    dining: { label: '외식비', icon: 'bxs:bowl-rice' },
-    cafe: { label: '카페', icon: 'mdi:coffee-outline' },
-  },
-  shoppingDropPercent: 20,
-  diningRisePercent: 15,
-  cafeTargetPerWeek: 3,
-};
+import { getWeeklyNudges, defaultWeekStart } from '@/api/dashboard';
 
 const router = useRouter();
-const goReports = () => {
-  router.push('/reports');
-};
+const goReports = () => router.push('/reports');
+
+const loading = ref(false);
+const error = ref('');
+const successMsg = ref('');
+const warningMsg = ref('');
+const actionMsg = ref('');
+
+async function load() {
+  loading.value = true;
+  error.value = '';
+  try {
+    const weekStart = defaultWeekStart();
+    const res = await getWeeklyNudges(weekStart);
+
+    const payload = res?.data ?? res ?? {};
+    successMsg.value = payload.success ?? '';
+    warningMsg.value = payload.warning ?? '';
+    actionMsg.value = payload.action ?? '';
+  } catch (e) {
+    error.value = e.message || '불러오기에 실패했어요.';
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(load);
 </script>
 
 <template>
@@ -38,23 +52,18 @@ const goReports = () => {
           <Icon icon="material-symbols:chevron-right" class="w-4 h-auto text-kb-gray-dark" />
         </Chip>
       </div>
-      <SummaryChipGroup :data="summaryData">
-        <!-- success -->
-        <template #success="{ data }">
-          {{ data.categories.shopping.label }} 지출이 지난주보다 {{ data.shoppingDropPercent }}%
-          줄었습니다.
+
+      <SummaryChipGroup>
+        <template #success>
+          {{ successMsg }}
         </template>
 
-        <!-- warning -->
-        <template #warning="{ data }">
-          {{ data.categories.dining.label }}가 지난주보다 {{ data.diningRisePercent }}%
-          증가했습니다.
+        <template #warning>
+          {{ warningMsg }}
         </template>
 
-        <!-- recommend -->
-        <template #recommend="{ data }">
-          다음 주에는 {{ data.categories.cafe.label }} 결제를 주 {{ data.cafeTargetPerWeek }}회
-          이하로 줄여보세요!
+        <template #recommend>
+          {{ actionMsg }}
         </template>
       </SummaryChipGroup>
     </div>
