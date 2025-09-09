@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import BaseTab from '@/components/common/Tab/BaseTab.vue';
 import ExpenseRadioChart from './radiochart/ExpenseRadioChart.vue';
 import TargetRatioChart from './radiochart/TargetRatioChart.vue';
-import { getBudgetSummary } from '@/api/budget';
+import { getBudgetSummary, getLatestBudgetTarget } from '@/api/budget';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
 
@@ -13,42 +13,48 @@ const tabs = [
 ];
 
 const currentTab = ref('spending');
-
 const loading = ref(false);
 const error = ref('');
 const actual = ref({ essential: 50, discretionary: 30, savings: 20 });
 const target = ref({ essential: 50, discretionary: 30, savings: 20 });
 
 const pct = (v) => Math.round(Number(v || 0) * 100);
-
 const router = useRouter();
-const goGoalSettings = () => {
-  router.push('/goals/edit');
-};
+const goGoalSettings = () => router.push('/goals/edit');
 
 async function load() {
   loading.value = true;
   error.value = '';
+
   try {
-    const data = await getBudgetSummary();
+    try {
+      const summary = await getBudgetSummary();
+      const a = summary?.data?.actual ?? summary?.actual ?? {};
+      if (Object.keys(a).length) {
+        actual.value = {
+          essential: pct(a.essential),
+          discretionary: pct(a.discretionary),
+          savings: pct(a.savings),
+        };
+      }
+      console.log('[RatioTab] actual:', actual.value);
+    } catch (e) {
+      console.warn('[RatioTab] summary fail:', e?.message);
+    }
 
-    const a = data?.data?.actual || data?.actual || {};
-    actual.value = {
-      essential: pct(a.essential),
-      discretionary: pct(a.discretionary),
-      savings: pct(a.savings),
-    };
-
-    const t = data?.data?.target || data?.data?.goal || data?.target || data?.goal || {};
-    const toPct = (x) => (x <= 1 ? Math.round(Number(x || 0) * 100) : Math.round(Number(x || 0)));
-    if (Object.keys(t).length) {
+    try {
+      const latest = await getLatestBudgetTarget();
       target.value = {
-        essential: toPct(t.essential ?? 50),
-        discretionary: toPct(t.discretionary ?? 30),
-        savings: toPct(t.savings ?? 20),
+        essential: latest.essential ?? 50,
+        discretionary: latest.discretionary ?? 30,
+        savings: latest.savings ?? 20,
       };
+      console.log('[RatioTab] target:', target.value);
+    } catch (e) {
+      console.error('[RatioTab] targets fail:', e?.message);
     }
   } catch (e) {
+    console.error('[RatioTab] load error:', e);
     error.value = e.message || '불러오기 실패';
   } finally {
     loading.value = false;
@@ -83,7 +89,9 @@ onMounted(load);
         </button>
       </div>
 
-      <TargetRatioChart :actual="actual" :target="target" />
+      <TargetRatioChart :target="target" />
     </div>
+
+    <p v-if="error" class="mt-2 text-red-500 caption3">{{ error }}</p>
   </div>
 </template>
