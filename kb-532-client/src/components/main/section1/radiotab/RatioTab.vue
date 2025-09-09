@@ -4,6 +4,8 @@ import BaseTab from '@/components/common/Tab/BaseTab.vue';
 import ExpenseRadioChart from './radiochart/ExpenseRadioChart.vue';
 import TargetRatioChart from './radiochart/TargetRatioChart.vue';
 import { getBudgetSummary } from '@/api/budget';
+import { useRouter } from 'vue-router';
+import { Icon } from '@iconify/vue';
 
 const tabs = [
   { label: '지출 비율', value: 'spending' },
@@ -18,6 +20,11 @@ const actual = ref({ essential: 50, discretionary: 30, savings: 20 });
 const target = ref({ essential: 50, discretionary: 30, savings: 20 });
 
 const pct = (v) => Math.round(Number(v || 0) * 100);
+
+const router = useRouter();
+const goGoalSettings = () => {
+  router.push('/goals/edit');
+};
 
 async function load() {
   loading.value = true;
@@ -56,13 +63,27 @@ onMounted(load);
 
   <div class="mt-4">
     <div v-if="currentTab === 'spending'">
-      <ExpenseRadioChart :actual="actual" />
+      <ExpenseRadioChart :actual="actual" class="mt-8" />
     </div>
 
     <div v-else-if="currentTab === 'goal'">
+      <div class="flex items-center justify-end caption3 text-gray-600">
+        <button
+          type="button"
+          class="inline-flex items-center gap-1 hover:opacity-80 active:opacity-60 caption3 text-gray-600"
+          @click="goGoalSettings"
+        >
+          <span class="align-middle">목표 비율 설정</span>
+          <Icon
+            icon="material-symbols:settings-rounded"
+            width="16"
+            height="16"
+            class="align-middle mr-2"
+          />
+        </button>
+      </div>
+
       <TargetRatioChart :actual="actual" :target="target" />
     </div>
-
-    <p v-if="error" class="mt-2 text-red-500 body2">{{ error }}</p>
   </div>
 </template>
