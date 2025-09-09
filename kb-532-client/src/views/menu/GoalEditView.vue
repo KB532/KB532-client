@@ -37,7 +37,7 @@ const onSave = async () => {
       savings: form.saving,
     });
     setGoals([form.essential, form.optional, form.saving]);
-    router.push('/menu');
+    router.push('/');
   } catch (err) {
     console.error('목표 저장 실패:', err);
     alert('저장 중 오류가 발생했습니다.');
@@ -48,13 +48,13 @@ const onSave = async () => {
 <template>
   <TopMenuBar>50/30/20 목표 수정하기</TopMenuBar>
 
-  <div class="mt-20">
+  <div class="mt-20 p-4">
     <section class="panel mb-8">
       <h3 class="title3 mb-4">대표 유형 추천</h3>
       <PresetGrid :presets="presets" @select="applyPreset" />
     </section>
 
-    <div class="-mx-4 my-4 h-[8px] bg-gray-200"></div>
+    <div class="-mx-8 my-4 h-[8px] bg-gray-200"></div>
 
     <h3 class="title3 mb-4">개인 목표 설정</h3>
     <EditablePercentRow label="필수" :color="'#5AA9FF'" v-model="form.essential" />

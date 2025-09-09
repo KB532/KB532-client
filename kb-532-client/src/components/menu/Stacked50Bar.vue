@@ -8,7 +8,7 @@ const props = defineProps({
 const enriched = computed(() => {
   let acc = 0;
   return props.segments.map((s, i) => {
-    const start = acc; // 시작 지점 %
+    const start = acc;
     const center = start + s.value / 2;
     acc += s.value;
     return { ...s, start, center, i };

@@ -27,17 +27,17 @@ const onEditGoals = () => router.push({ name: 'goal-edit' });
 </script>
 
 <template>
-  <main class="content">
+  <main class="content p-4">
     <GreetingBlock :username="username" @profile="() => console.log('프로필 설정')" />
 
     <GoalsCard :goals="goals" @edit="onEditGoals" />
-    <div class="my-3 h-[8px] w-full bg-gray-200"></div>
+    <div class="-mx-4 my-4 h-[8px] bg-gray-200"></div>
 
     <SettingsGroup title="알람 설정">
       <SettingItemToggle label="알림 여부" v-model="alarmMain" class="mt-2" />
     </SettingsGroup>
 
-    <div class="my-4 h-[8px] w-full bg-gray-200"></div>
+    <div class="-mx-4 my-4 h-[8px] bg-gray-200"></div>
 
     <SettingsGroup title="환경 설정">
       <div class="space-y-3 mt-2">

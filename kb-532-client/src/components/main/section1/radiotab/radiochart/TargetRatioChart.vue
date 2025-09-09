@@ -1,14 +1,14 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
-import { goals } from '@/stores/goals';
+
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
 const CAPTION3_PX = 11;
 const CAPTION_WEIGHT = 500;
 
 const props = defineProps({
-  actual: {
+  target: {
     type: Object,
     default: () => ({ essential: 50, discretionary: 30, savings: 20 }),
   },
@@ -16,16 +16,16 @@ const props = defineProps({
 });
 
 const labels = ['필수 지출', '자유 지출', '저축'];
-const colors = ['#48637E', '#FFC831', '#C0E2FF']; // 도넛 색
+const colors = ['#48637E', '#FFC831', '#C0E2FF'];
 const textGray = '#60584C';
 const lineColor = '#60584C';
 
-const actualArr = computed(() => [
-  props.actual.essential,
-  props.actual.discretionary,
-  props.actual.savings,
+const clampPct = (v) => Math.round(Number(v || 0));
+const targetArr = computed(() => [
+  clampPct(props.target.essential),
+  clampPct(props.target.discretionary),
+  clampPct(props.target.savings),
 ]);
-const targetArr = computed(() => goals.map((g) => g.value));
 
 const chartRef = ref(null);
 let chart;
@@ -62,7 +62,7 @@ const Callouts = {
       const ringMid = (p.innerRadius + p.outerRadius) / 2;
       const startInset = 4;
       const sx = p.x + Math.cos(a) * (ringMid - startInset);
-      const sy = p.y + Math.sin(a) * (ringMid - startInset) + yJitter[i];
+      const sy = p.y + Math.sin(a) * (ringMid - startInset) + (yJitter[i] || 0);
 
       const lineLen = 100;
       const ex = sx + (right ? lineLen : -lineLen);
@@ -73,7 +73,6 @@ const Callouts = {
       ctx.lineTo(ex, ey);
       ctx.stroke();
 
-      ctx.fillStyle = lineColor;
       const d = 3.5;
       ctx.beginPath();
       ctx.moveTo(sx, sy - d);
@@ -83,18 +82,15 @@ const Callouts = {
       ctx.closePath();
       ctx.fill();
 
-      const labelGap = 0;
-      const tx = ex + (right ? labelGap : -labelGap);
-      const ty = ey;
-
       const name = labels[i];
-      const val = actualArr.value[i];
-
+      const val = targetArr.value[i];
       ctx.textAlign = right ? 'right' : 'left';
-
       ctx.textBaseline = 'middle';
       ctx.fillStyle = textGray;
       ctx.font = `${CAPTION_WEIGHT} ${CAPTION3_PX}px 'Spoqa Han Sans Neo', sans-serif`;
+      const labelGap = 0;
+      const tx = ex + (right ? labelGap : -labelGap);
+      const ty = ey;
       ctx.fillText(`${name} ${val}%`, tx, ty - 10);
     });
 
@@ -110,7 +106,7 @@ onMounted(() => {
       labels,
       datasets: [
         {
-          data: actualArr.value,
+          data: targetArr.value,
           backgroundColor: colors,
           borderWidth: 0,
           radius: Math.max(10, Math.round(props.donutDiameter / 2)),
@@ -134,14 +130,9 @@ onMounted(() => {
   });
 });
 
-watch(actualArr, (vals) => {
+watch(targetArr, (vals) => {
   if (!chart) return;
   chart.data.datasets[0].data = vals;
-  chart.update();
-});
-
-watch(targetArr, () => {
-  if (!chart) return;
   chart.update();
 });
 
