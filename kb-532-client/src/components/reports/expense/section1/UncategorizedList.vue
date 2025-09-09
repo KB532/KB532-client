@@ -3,15 +3,21 @@ import { ref } from "vue";
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import ExpenseListItem from '@/components/reports/expense/ExpenseListItem.vue';
 import ScrollFadeOverlay from '@/components/common/Overlay/ScrollFadeOverlay.vue';
+import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.vue';
 
 const listRef = ref(null);
 const isAtBottom = ref(false);
+const isModalOpen = ref(false);
 
 const handleScroll = () => {
   const el = listRef.value;
   if (!el) return;
   isAtBottom.value = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
 };
+
+const handleClickItem = () => {
+  isModalOpen.value = true;
+}
 
 const data = [
   {
@@ -65,8 +71,10 @@ const data = [
         :name="item.name"
         :date="item.date"
         :amount="item.amount"
+        @click="handleClickItem"
       />
     </div>
     <ScrollFadeOverlay :isAtBottom="isAtBottom" />
+    <ExpenseDetailModal v-model="isModalOpen" />
   </BaseCard>
 </template>

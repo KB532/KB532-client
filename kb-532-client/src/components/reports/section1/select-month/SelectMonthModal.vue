@@ -1,6 +1,6 @@
 <script setup>
 import { Icon } from '@iconify/vue';
-import {computed} from "vue";
+import { computed } from 'vue';
 
 const props = defineProps({
   modelValue: Boolean,
