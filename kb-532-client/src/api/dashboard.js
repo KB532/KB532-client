@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const BASE = import.meta.env?.VITE_API_BASE || '/api';
+// top3
 
 export async function getMonthlyTop3() {
-  const { data } = await axios.get(`${BASE}/dashboard/monthly-top3`);
+  const { data } = await axios.get(`/api/dashboard/monthly-top3`);
 
   const topItems =
     (Array.isArray(data?.topItems) && data.topItems) ||
@@ -20,4 +20,32 @@ export async function getMonthlyTop3() {
       isIncreased: !!it.isIncreased,
       rank: it.rank,
     }));
+}
+
+// weekly-nudges
+
+export function defaultWeekStart(date = new Date()) {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = day;
+  d.setDate(d.getDate() - diff);
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString().slice(0, 10);
+}
+
+export async function getWeeklyNudges(weekStart = defaultWeekStart()) {
+  try {
+    const { data } = await axios.get('/api/dashboard/weekly-nudges', {
+      params: { weekStart, _t: Date.now() },
+      headers: { 'Cache-Control': 'no-cache' },
+    });
+    return data;
+  } catch (err) {
+    const msg =
+      err?.response?.data?.error?.message ||
+      `HTTP ${err?.response?.status || ''}`.trim() ||
+      err.message ||
+      'Unknown error';
+    throw new Error(msg);
+  }
 }
