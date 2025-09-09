@@ -1,26 +1,34 @@
 <script setup>
-import Stacked50Bar from '@/components/menu/Stacked50Bar.vue'
+import { computed } from 'vue';
+import Stacked50Bar from '@/components/menu/Stacked50Bar.vue';
+import { Icon } from '@iconify/vue';
 
 const props = defineProps({
-  goals: { type: Array, required: true } // [{label,value,color}]
-})
-const emit = defineEmits(['edit'])
+  goals: { type: Array, required: true },
+});
+defineEmits(['edit']);
+
+const colorMap = {
+  필수: '#5AA9FF',
+  선택: '#FF8B8B',
+  저축: '#FFBC74',
+};
+
+const coloredGoals = computed(() =>
+  props.goals.map((g) => ({ ...g, color: colorMap[g.label] || g.color })),
+);
 </script>
 
 <template>
-  <section class="card bg-gray-100">
-    <div class="card-header">
-      <h3 class="font-bold">나의 현재 50/30/20 목표</h3>
-      <button class="ghost" @click="$emit('edit')">목표 수정하기</button>
+  <section class="rounded-lg bg-gray-100 p-4 mx-4 h-32 flex flex-col justify-center gap-y-7">
+    <div class="flex items-center justify-between">
+      <h3 class="subtitle1">나의 현재 50/30/20 목표</h3>
+      <button class="caption3 flex items-center gap-1 text-gray-600" @click="$emit('edit')">
+        <span>목표 수정하기</span>
+        <Icon icon="material-symbols:arrow-forward-ios-rounded" class="h-3 w-auto" />
+      </button>
     </div>
 
-    <Stacked50Bar :segments="goals" />
+    <Stacked50Bar :segments="coloredGoals" />
   </section>
 </template>
-
-<style scoped>
-.card {  border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 6px 16px rgba(0,0,0,.04); padding: 14px; }
-.card-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
-.card-header h3 { font-size: 15px; margin: 0; }
-.ghost { border: 0; background: transparent; cursor: pointer; color: #6b7280; font-size: 13px; text-decoration: underline; }
-</style>
