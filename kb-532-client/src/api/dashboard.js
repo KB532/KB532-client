@@ -49,3 +49,23 @@ export async function getWeeklyNudges(weekStart = defaultWeekStart()) {
     throw new Error(msg);
   }
 }
+
+// monthly-comparison
+
+function fmtMonth(d = new Date()) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  return `${y}-${m}`;
+}
+
+export async function getMonthlyComparison(month = fmtMonth()) {
+  const { data } = await axios.get('/api/dashboard/monthly-comparison', {
+    params: { month, _t: Date.now() },
+    headers: { 'Cache-Control': 'no-cache' },
+  });
+  if (!data?.success) {
+    const msg = data?.error?.message || 'monthly-comparison API 실패';
+    throw new Error(msg);
+  }
+  return data.data;
+}
