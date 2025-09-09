@@ -2,6 +2,8 @@
 import { reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { goals, setGoals } from '@/stores/goals';
+import { saveBudgetTargets } from '@/api/budget';
+
 import PresetGrid from '@/components/menu/goals/PresetGrid.vue';
 import EditablePercentRow from '@/components/menu/goals/EditablePercentRow.vue';
 import SubmitButton from '@/components/common/Button/SubmitButton.vue';
@@ -20,15 +22,26 @@ const presets = [
   { key: 'saving', name: '저축형', values: { essential: 40, optional: 30, saving: 30 } },
   { key: 'free', name: '자유형', values: { essential: 50, optional: 40, saving: 10 } },
 ];
+
 const applyPreset = (v) => Object.assign(form, v);
 
 const sum = computed(() => form.essential + form.optional + form.saving);
 const valid = computed(() => sum.value === 100);
 
-const onSave = () => {
+const onSave = async () => {
   if (!valid.value) return;
-  setGoals([form.essential, form.optional, form.saving]);
-  router.push('/menu');
+  try {
+    await saveBudgetTargets({
+      essential: form.essential,
+      discretionary: form.optional,
+      savings: form.saving,
+    });
+    setGoals([form.essential, form.optional, form.saving]);
+    router.push('/menu');
+  } catch (err) {
+    console.error('목표 저장 실패:', err);
+    alert('저장 중 오류가 발생했습니다.');
+  }
 };
 </script>
 
@@ -69,8 +82,9 @@ const onSave = () => {
               'text-red-500': sum > 100,
               'text-gray-400': sum < 100,
             }"
-            >%</span
           >
+            %
+          </span>
         </div>
       </div>
 
