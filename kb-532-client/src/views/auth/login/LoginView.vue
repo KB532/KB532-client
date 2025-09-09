@@ -1,10 +1,9 @@
-<!-- src/views/auth/SignInView.vue (파일명은 현재 사용 중인 경로에 맞춰주세요) -->
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import LoginInputForm from '@/components/auth/login/LoginInputForm.vue'
 import DarkButton from '@/components/common/Button/DarkButton.vue'
-import { login } from '@/api/auth'   // ← 추가
+import { login } from '@/api/auth'   
 
 const router = useRouter()
 
@@ -19,8 +18,8 @@ const errors = computed(() => ({
 }))
 const isFormInvalid = computed(() => Object.values(errors.value).some(Boolean))
 
-const loading = ref(false)       // ← 추가
-const serverError = ref('')      // ← 추가
+const loading = ref(false)      
+const serverError = ref('')      
 
 async function submit() {
   serverError.value = ''
