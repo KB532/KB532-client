@@ -16,9 +16,9 @@ const props = defineProps({
       <CategoryIcon :category="props.category" />
       <div>
         <p class="body2 text-black">{{ props.name || '-' }}</p>
-        <p class="caption3 text-gray-600">{{ props.date }}</p>
+        <p class="caption3 text-gray-600">{{ props.date || '-' }}</p>
       </div>
     </div>
-    <p class="subtitle1 text-black">{{ numberWithCommas(props.amount) }}원</p>
+    <p class="subtitle1 text-black">{{ numberWithCommas(props.amount) || '0' }}원</p>
   </div>
 </template>
