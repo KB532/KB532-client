@@ -1,7 +1,17 @@
 <script setup>
+import { ref } from "vue";
 import { Icon } from '@iconify/vue';
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import ExpenseListItem from '@/components/reports/expense/ExpenseListItem.vue';
+import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.vue';
+
+const isModalOpen = ref(false);
+const currentItem = ref(null);
+
+const handleClickItem = (item) => {
+  currentItem.value = item;
+  isModalOpen.value = true;
+}
 
 const data = [
   {
@@ -50,7 +60,9 @@ const data = [
         :name="item.name"
         :date="item.date"
         :amount="item.amount"
+        @click="handleClickItem(item)"
       />
     </div>
+    <ExpenseDetailModal v-model="isModalOpen" :data="currentItem" />
   </BaseCard>
 </template>
