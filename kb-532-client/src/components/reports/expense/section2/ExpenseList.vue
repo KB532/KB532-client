@@ -4,13 +4,19 @@ import { Icon } from '@iconify/vue';
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import ExpenseListItem from '@/components/reports/expense/ExpenseListItem.vue';
 import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.vue';
+import AddExpenseModal from '@/components/reports/expense/AddExpenseModal.vue';
 
-const isModalOpen = ref(false);
+const isAddModalOpen = ref(false);
+const isDetailModalOpen = ref(false);
 const currentItem = ref(null);
+
+const handleClickAddButton = () => {
+  isAddModalOpen.value = true;
+}
 
 const handleClickItem = (item) => {
   currentItem.value = item;
-  isModalOpen.value = true;
+  isDetailModalOpen.value = true;
 }
 
 const data = [
@@ -50,6 +56,7 @@ const data = [
     <Icon
       icon="material-symbols:add-2-rounded"
       class="fixed top-4 right-8 size-6 rounded-full text-gray-600 hover:text-black active:text-black active:bg-gray-200"
+      @click="handleClickAddButton"
     />
     <h1 class="subtitle1 text-black">9월 8일</h1>
     <div class="flex flex-col -mx-4">
@@ -63,6 +70,7 @@ const data = [
         @click="handleClickItem(item)"
       />
     </div>
-    <ExpenseDetailModal v-model="isModalOpen" :data="currentItem" />
+    <ExpenseDetailModal v-model="isDetailModalOpen" :data="currentItem" />
+    <AddExpenseModal v-model="isAddModalOpen" />
   </BaseCard>
 </template>
