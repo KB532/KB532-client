@@ -3,6 +3,7 @@ import { Icon } from '@iconify/vue';
 
 const props = defineProps({
   title: String,
+  isOpen: Boolean,
 });
 </script>
 
@@ -11,6 +12,9 @@ const props = defineProps({
     <p :class="title === '미분류' ? 'text-red-200' : 'text-blue-200'">
       {{ props.title }}
     </p>
-    <Icon icon="material-symbols:arrow-back-ios-new-rounded" class="size-4 text-gray-600 -rotate-90" />
+    <Icon
+      icon="material-symbols:arrow-back-ios-new-rounded"
+      :class="['size-4 text-gray-600', isOpen ? 'rotate-90' : '-rotate-90']"
+    />
   </div>
 </template>

@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import SlidingModal from '@/components/common/Modal/SlidingModal.vue';
 import CategoryIcon from '@/components/common/Avatar/IconAvatar.vue';
@@ -17,6 +18,12 @@ const emits = defineEmits(['update:modelValue']);
 
 const handleClose = () => {
   emits('update:modelValue', false);
+};
+
+const openedDropdown = ref(null);
+
+const toggleDropdown = (key) => {
+  openedDropdown.value = openedDropdown.value === key ? null : key;
 };
 
 const categories = [
@@ -50,22 +57,40 @@ const categories = [
         <Icon icon="bxs:pencil" class="text-gray-600 size-6 hover:text-black active:text-black" />
       </div>
       <Divider />
-      <div class="flex items-center justify-between body1">
+      <div
+        class="flex items-center justify-between body1"
+        @click="toggleDropdown('category')"
+      >
         <p class="text-kb-gray-dark">카테고리 설정</p>
-        <DropdownItem title="미분류" />
+        <DropdownItem
+          title="미분류"
+          :isOpen="openedDropdown === 'category'"
+        />
       </div>
-      <div class="flex items-center justify-between body1">
+      <div
+        class="flex items-center justify-between body1"
+        @click="toggleDropdown('memo')"
+      >
         <p class="text-kb-gray-dark">메모</p>
-        <DropdownItem title="메모를 남겨보세요" />
+        <DropdownItem
+          title="메모를 남겨보세요"
+          :isOpen="openedDropdown === 'memo'"
+        />
       </div>
       <div class="flex items-center justify-between body1">
         <p class="text-kb-gray-dark">지출 합계에 포함</p>
         <Switch />
       </div>
       <Divider />
-      <div class="flex items-center justify-between body1">
+      <div
+        class="flex items-center justify-between body1"
+        @click="toggleDropdown('payment')"
+      >
         <p class="text-kb-gray-dark">결제 수단</p>
-        <DropdownItem title="카드" />
+        <DropdownItem
+          title="카드"
+          :isOpen="openedDropdown === 'payment'"
+        />
       </div>
       <div class="flex items-center justify-between body1 text-kb-gray-dark">
         <p>결제 일시</p>
@@ -77,6 +102,8 @@ const categories = [
         <p>{{ props.data.name }}</p>
       </div>
     </div>
-    <DropdownModal :data="categories" />
+    <DropdownModal
+      :data="categories"
+    />
   </SlidingModal>
 </template>
