@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Icon } from '@iconify/vue';
 import SlidingModal from '@/components/common/Modal/SlidingModal.vue';
 import DropdownItem from '@/components/common/Item/DropdownItem.vue';
@@ -21,7 +21,12 @@ const handleClose = () => {
 };
 
 const openedDropdown = ref(null);
-const date = ref(null);
+const payment = ref('');
+const category = ref('');
+const date = ref('');
+const amount = ref('');
+const name = ref('');
+const memo = ref('');
 
 const toggleDropdown = (key) => {
   openedDropdown.value = openedDropdown.value === key ? null : key;
@@ -39,6 +44,16 @@ const categories = [
   '카페·간식',
   '기타 지출'
 ];
+
+const isFormValid = computed(() => {
+  return (
+    payment.value &&
+    category.value &&
+    date.value &&
+    amount.value &&
+    name.value
+  );
+});
 </script>
 
 <template>
@@ -55,7 +70,7 @@ const categories = [
         <div class="flex justify-between">
           <p class="body1 text-kb-gray-dark">결제 수단</p>
           <DropdownItem
-            title="카드"
+            :title="payment || '선택'"
             :isOpen="openedDropdown === 'payment'"
             @click="toggleDropdown('payment')"
           />
@@ -64,7 +79,10 @@ const categories = [
           v-if="openedDropdown === 'payment'"
           class="absolute right-0 mt-2 z-50"
         >
-          <DropdownModal :data="['카드', '현금', '계좌이체']" />
+          <DropdownModal
+            :data="['카드', '현금', '계좌이체']"
+            @select="(val) => { payment.value = val; openedDropdown.value = null; }"
+          />
         </div>
       </div>
 
@@ -72,7 +90,7 @@ const categories = [
         <div class="flex justify-between">
           <p class="body1 text-kb-gray-dark">지출 카테고리</p>
           <DropdownItem
-            title="미분류"
+            :title="category || '선택'"
             :isOpen="openedDropdown === 'category'"
             @click="toggleDropdown('category')"
           />
@@ -81,7 +99,10 @@ const categories = [
           v-if="openedDropdown === 'category'"
           class="absolute right-0 mt-2 z-50"
         >
-          <DropdownModal :data="categories" />
+          <DropdownModal
+            :data="categories"
+            @select="(val) => { category.value = val; openedDropdown.value = null; }"
+          />
         </div>
       </div>
 
@@ -102,9 +123,11 @@ const categories = [
           </VueDatePicker>
         </div>
       </div>
+
       <div class="flex justify-between items-center">
         <p class="body1 text-kb-gray-dark">금액</p>
         <input
+          v-model="amount"
           class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2 text-black"
           placeholder="지출 금액을 입력해 주세요"
           type="number"
@@ -113,6 +136,7 @@ const categories = [
       <div class="flex justify-between items-center">
         <p class="body1 text-kb-gray-dark">이름</p>
         <input
+          v-model="name"
           class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2 text-black"
           placeholder="지출 이름을 입력해 주세요"
         />
@@ -120,12 +144,13 @@ const categories = [
       <div class="flex justify-between items-center">
         <p class="body1 text-kb-gray-dark">메모</p>
         <input
+          v-model="memo"
           class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2 text-black"
           placeholder="메모를 입력해 주세요"
           maxlength="50"
         />
       </div>
-      <DarkButton class="mt-2" :disabled="true">등록하기</DarkButton>
+      <DarkButton class="mt-2" :disabled="!isFormValid">등록하기</DarkButton>
     </div>
   </SlidingModal>
 </template>
