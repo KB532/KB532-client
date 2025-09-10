@@ -7,6 +7,9 @@ import DropdownModal from '@/components/common/Modal/DropdownModal.vue';
 import DarkButton from '@/components/common/Button/DarkButton.vue';
 import { numberWithCommas } from '@/assets/utils/index.js';
 
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
 const props = defineProps({
   modelValue: Boolean,
 });
@@ -18,6 +21,7 @@ const handleClose = () => {
 };
 
 const openedDropdown = ref(null);
+const date = ref(null);
 
 const toggleDropdown = (key) => {
   openedDropdown.value = openedDropdown.value === key ? null : key;
@@ -66,27 +70,42 @@ const categories = [
           :isOpen="openedDropdown === 'category'"
         />
       </div>
-      <div class="flex justify-between">
-        <p class="body1 text-kb-gray-dark">결제 일시</p>
+      <div class="flex justify-between items-center">
+        <p class="body1 text-kb-gray-dark">지출 일시</p>
+        <div class="w-3/4">
+          <VueDatePicker v-model="date" text-input>
+            <template #dp-input="{ value, onInput, onFocus, onBlur }">
+              <input
+                :value="value"
+                @input="onInput"
+                @focus="onFocus"
+                @blur="onBlur"
+                class="w-full h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2 text-black"
+                placeholder="지출 날짜를 선택해 주세요"
+              />
+            </template>
+          </VueDatePicker>
+        </div>
       </div>
       <div class="flex justify-between items-center">
         <p class="body1 text-kb-gray-dark">금액</p>
         <input
-          class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2"
-          placeholder="금액을 입력해 주세요"
+          class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2 text-black"
+          placeholder="지출 금액을 입력해 주세요"
+          type="number"
         />
       </div>
       <div class="flex justify-between items-center">
         <p class="body1 text-kb-gray-dark">이름</p>
         <input
-          class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2"
-          placeholder="이름을 입력해 주세요"
+          class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2 text-black"
+          placeholder="지출 이름을 입력해 주세요"
         />
       </div>
       <div class="flex justify-between items-center">
         <p class="body1 text-kb-gray-dark">메모</p>
         <input
-          class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2"
+          class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2 text-black"
           placeholder="메모를 입력해 주세요"
         />
       </div>
