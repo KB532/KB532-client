@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 
-const isClicked = ref(false);
+const isClicked = ref(true);
 const emits = defineEmits(["click"]);
 
 const toggle = () => {
