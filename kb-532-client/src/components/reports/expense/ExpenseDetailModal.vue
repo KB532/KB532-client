@@ -56,17 +56,28 @@ const categories = [
         <h1 class="title1 text-black">-{{ numberWithCommas(props.data?.amount) }}원</h1>
         <Icon icon="bxs:pencil" class="text-gray-600 size-6 hover:text-black active:text-black" />
       </div>
+
       <Divider />
-      <div
-        class="flex items-center justify-between body1"
-        @click="toggleDropdown('category')"
-      >
-        <p class="text-kb-gray-dark">카테고리 설정</p>
-        <DropdownItem
-          title="미분류"
-          :isOpen="openedDropdown === 'category'"
-        />
+
+      <div class="relative">
+        <div
+          class="flex items-center justify-between body1"
+          @click="toggleDropdown('category')"
+        >
+          <p class="text-kb-gray-dark">카테고리 설정</p>
+          <DropdownItem
+            title="미분류"
+            :isOpen="openedDropdown === 'category'"
+          />
+        </div>
+        <div
+          v-if="openedDropdown === 'category'"
+          class="absolute right-0 mt-2 z-50"
+        >
+          <DropdownModal :data="categories" />
+        </div>
       </div>
+
       <div
         class="flex items-center justify-between body1"
         @click="toggleDropdown('memo')"
@@ -77,33 +88,43 @@ const categories = [
           :isOpen="openedDropdown === 'memo'"
         />
       </div>
+
       <div class="flex items-center justify-between body1">
         <p class="text-kb-gray-dark">지출 합계에 포함</p>
         <Switch />
       </div>
+
       <Divider />
-      <div
-        class="flex items-center justify-between body1"
-        @click="toggleDropdown('payment')"
-      >
-        <p class="text-kb-gray-dark">결제 수단</p>
-        <DropdownItem
-          title="카드"
-          :isOpen="openedDropdown === 'payment'"
-        />
+
+      <div class="relative">
+        <div
+          class="flex items-center justify-between body1"
+          @click="toggleDropdown('payment')"
+        >
+          <p class="text-kb-gray-dark">결제 수단</p>
+          <DropdownItem
+            title="카드"
+            :isOpen="openedDropdown === 'payment'"
+          />
+        </div>
+        <div
+          v-if="openedDropdown === 'payment'"
+          class="absolute right-0 mt-2 z-50"
+        >
+          <DropdownModal :data="['카드', '현금', '계좌이체']" />
+        </div>
       </div>
+
       <div class="flex items-center justify-between body1 text-kb-gray-dark">
         <p>결제 일시</p>
         <p>{{ props.data.date }}</p>
       </div>
+
 <!--      Todo: 사용처 name이 아니고 데이터에 맞게 바꿔야 함-->
       <div class="flex items-center justify-between body1 text-kb-gray-dark">
         <p>사용처</p>
         <p>{{ props.data.name }}</p>
       </div>
     </div>
-    <DropdownModal
-      :data="categories"
-    />
   </SlidingModal>
 </template>

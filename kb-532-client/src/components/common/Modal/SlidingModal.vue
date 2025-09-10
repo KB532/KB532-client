@@ -6,7 +6,7 @@ const props = defineProps({
 
 <template>
   <v-bottom-sheet v-model="props.modelValue">
-    <div class="rounded-t-xl bg-white p-4 pb-9 min-h-20">
+    <div class="rounded-t-xl bg-white p-4 pb-20 min-h-20">
       <slot />
     </div>
   </v-bottom-sheet>
