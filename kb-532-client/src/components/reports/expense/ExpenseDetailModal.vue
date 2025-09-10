@@ -60,14 +60,12 @@ const categories = [
       <Divider />
 
       <div class="relative">
-        <div
-          class="flex items-center justify-between body1"
-          @click="toggleDropdown('category')"
-        >
+        <div class="flex items-center justify-between body1">
           <p class="text-kb-gray-dark">카테고리 설정</p>
           <DropdownItem
             title="미분류"
             :isOpen="openedDropdown === 'category'"
+            @click="toggleDropdown('category')"
           />
         </div>
         <div
@@ -79,14 +77,12 @@ const categories = [
       </div>
 
       <div class="relative">
-        <div
-          class="flex items-center justify-between body1"
-          @click="toggleDropdown('memo')"
-        >
+        <div class="flex items-center justify-between body1">
           <p class="text-kb-gray-dark">메모</p>
           <DropdownItem
             title="메모를 남겨보세요"
             :isOpen="openedDropdown === 'memo'"
+            @click="toggleDropdown('memo')"
           />
         </div>
         <div
@@ -105,14 +101,12 @@ const categories = [
       <Divider />
 
       <div class="relative">
-        <div
-          class="flex items-center justify-between body1"
-          @click="toggleDropdown('payment')"
-        >
+        <div class="flex items-center justify-between body1">
           <p class="text-kb-gray-dark">결제 수단</p>
           <DropdownItem
             title="카드"
             :isOpen="openedDropdown === 'payment'"
+            @click="toggleDropdown('payment')"
           />
         </div>
         <div
