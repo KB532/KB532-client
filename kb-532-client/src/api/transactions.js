@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { iconKeyFromSubcategory } from '../utils/subcategoryIcon.js';
 
 // weekly
 export async function getWeeklySpending({ weeks = 5 } = {}) {
@@ -28,56 +29,19 @@ export async function getWeeklySpending({ weeks = 5 } = {}) {
 }
 
 // monthly
-const KEY = {
-  shopping: 'shopping',
-  finance: 'finance',
-  food: 'food',
-  transfer: 'transfer',
-  transit: 'transit',
-  health: 'health',
-  home: 'home',
-  living: 'living',
-  snacks: 'snacks',
-  others: 'others',
-  unclassified: 'unclassified',
-};
-
-function mapKorToKey(raw = '') {
-  const s = String(raw)
-    .trim()
-    .replace(/\s+/g, '')
-    .replace(/[/•ㆍ]/g, '·');
-
-  if (s === '쇼핑') return KEY.shopping;
-  if (s === '보험·대출·기타금융' || s === '보험/대출/기타금융') return KEY.finance;
-  if (s === '식비') return KEY.food;
-  if (s === '이체') return KEY.transfer;
-  if (s === '교통') return KEY.transit;
-  if (s === '의료·건강·피트니스' || s === '의료/건강/피트니스') return KEY.health;
-  if (s === '주거·통신' || s === '주거/통신') return KEY.home;
-  if (s === '생활') return KEY.living;
-  if (s === '카페·간식' || s === '카페/간식') return KEY.snacks;
-
-  if (s === '기타지출' || s === '기타·지출' || s === '기타') return KEY.others;
-  if (s === '미분류') return KEY.unclassified;
-
-  return KEY.others;
-}
-
 export async function getMonthlySpending({ month }) {
   const { data } = await axios.get(`/api/transactions/monthly`, { params: { month } });
   const d = data?.data || {};
   const rows = d?.categories || [];
 
   let categories = rows.map((c, idx) => ({
-    key: mapKorToKey(c.subcategory),
+    key: iconKeyFromSubcategory(c.subcategory),
     label: c.subcategory,
     amount: Number(c.amount) || 0,
     percent: Number(c.percent) || 0,
     _i: idx,
   }));
 
-  // 정렬
   categories.sort((a, b) => {
     const order = {
       shopping: 0,
@@ -103,4 +67,14 @@ export async function getMonthlySpending({ month }) {
     deltaPercent: Number(d.deltaPercent) || 0,
     categories,
   };
+}
+
+// transactions.js
+
+export async function listTransactions({ page = 1, size = 50, from, to } = {}) {
+  const { data } = await axios.get('/api/transactions', {
+    params: { page, size, from, to, _t: Date.now() },
+    headers: { 'Cache-Control': 'no-cache' },
+  });
+  return data?.data ?? { content: [], page: 1, size, totalElements: 0, totalPages: 0 };
 }
