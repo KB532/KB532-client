@@ -4,6 +4,7 @@ import SlidingModal from '@/components/common/Modal/SlidingModal.vue';
 import CategoryIcon from '@/components/common/Avatar/IconAvatar.vue';
 import Divider from '@/components/common/Divider/Divider.vue';
 import Switch from '@/components/common/Switch/Switch.vue';
+import DropdownModal from '@/components/common/Modal/DropdownModal.vue';
 import { numberWithCommas } from '@/assets/utils/index.js';
 
 const props = defineProps({
@@ -15,7 +16,20 @@ const emits = defineEmits(['update:modelValue']);
 
 const handleClose = () => {
   emits('update:modelValue', false);
-}
+};
+
+const categories = [
+  '쇼핑',
+  '보험·대출·기타금융',
+  '식비',
+  '이체',
+  '교통',
+  '의료·건강·피트니스',
+  '주거·통신',
+  '생활',
+  '카페·간식',
+  '기타 지출'
+];
 </script>
 
 <template>
@@ -71,5 +85,6 @@ const handleClose = () => {
         <p>{{ props.data.name }}</p>
       </div>
     </div>
+    <DropdownModal :data="categories" />
   </SlidingModal>
 </template>
