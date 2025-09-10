@@ -78,15 +78,23 @@ const categories = [
         </div>
       </div>
 
-      <div
-        class="flex items-center justify-between body1"
-        @click="toggleDropdown('memo')"
-      >
-        <p class="text-kb-gray-dark">메모</p>
-        <DropdownItem
-          title="메모를 남겨보세요"
-          :isOpen="openedDropdown === 'memo'"
-        />
+      <div class="relative">
+        <div
+          class="flex items-center justify-between body1"
+          @click="toggleDropdown('memo')"
+        >
+          <p class="text-kb-gray-dark">메모</p>
+          <DropdownItem
+            title="메모를 남겨보세요"
+            :isOpen="openedDropdown === 'memo'"
+          />
+        </div>
+        <div
+          v-if="openedDropdown === 'memo'"
+          class="absolute right-0 mt-2 z-50"
+        >
+          <DropdownModal type="input" />
+        </div>
       </div>
 
       <div class="flex items-center justify-between body1">
