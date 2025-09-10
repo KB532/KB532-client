@@ -4,6 +4,7 @@ import SlidingModal from '@/components/common/Modal/SlidingModal.vue';
 import CategoryIcon from '@/components/common/Avatar/IconAvatar.vue';
 import Divider from '@/components/common/Divider/Divider.vue';
 import Switch from '@/components/common/Switch/Switch.vue';
+import DropdownItem from '@/components/common/Item/DropdownItem.vue';
 import DropdownModal from '@/components/common/Modal/DropdownModal.vue';
 import { numberWithCommas } from '@/assets/utils/index.js';
 
@@ -51,17 +52,11 @@ const categories = [
       <Divider />
       <div class="flex items-center justify-between body1">
         <p class="text-kb-gray-dark">카테고리 설정</p>
-        <div class="flex gap-2 items-center">
-          <p class="text-red-200">미분류</p>
-          <Icon icon="material-symbols:arrow-back-ios-new-rounded" class="size-4 text-gray-600 -rotate-90" />
-        </div>
+        <DropdownItem title="미분류" />
       </div>
       <div class="flex items-center justify-between body1">
         <p class="text-kb-gray-dark">메모</p>
-        <div class="flex gap-2 items-center">
-          <p class="text-blue-200">메모를 남겨보세요</p>
-          <Icon icon="material-symbols:arrow-back-ios-new-rounded" class="size-4 text-gray-600 -rotate-90" />
-        </div>
+        <DropdownItem title="메모를 남겨보세요" />
       </div>
       <div class="flex items-center justify-between body1">
         <p class="text-kb-gray-dark">지출 합계에 포함</p>
@@ -70,10 +65,7 @@ const categories = [
       <Divider />
       <div class="flex items-center justify-between body1">
         <p class="text-kb-gray-dark">결제 수단</p>
-        <div class="flex gap-2 items-center">
-          <p class="text-blue-200">카드</p>
-          <Icon icon="material-symbols:arrow-back-ios-new-rounded" class="size-4 text-gray-600 -rotate-90" />
-        </div>
+        <DropdownItem title="카드" />
       </div>
       <div class="flex items-center justify-between body1 text-kb-gray-dark">
         <p>결제 일시</p>
