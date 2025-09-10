@@ -1,13 +1,11 @@
-<!-- src/components/reports/expense/section1/UncategorizedList.vue -->
 <script setup>
 import { ref, onMounted } from 'vue';
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import ExpenseListItem from '@/components/reports/expense/ExpenseListItem.vue';
 import ScrollFadeOverlay from '@/components/common/Overlay/ScrollFadeOverlay.vue';
 import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.vue'; // 경로 확인
-import { listTransactions } from '@/api/transactions'; // 경로 확인
+import { listTransactions } from '@/api/transactions';
 
-/* ── state ─────────────────────────────────────────────── */
 const listRef = ref(null);
 const isAtBottom = ref(false);
 
@@ -18,7 +16,6 @@ const data = ref([]);
 const isModalOpen = ref(false);
 const currentItem = ref(null);
 
-/* ── ui handlers ───────────────────────────────────────── */
 const handleScroll = () => {
   const el = listRef.value;
   if (!el) return;
@@ -30,7 +27,6 @@ const handleClickItem = (item) => {
   isModalOpen.value = true;
 };
 
-/* ── helpers ───────────────────────────────────────────── */
 function isUncategorized(tx) {
   const c = tx?.classification;
   if (!c) return true;
@@ -73,7 +69,6 @@ function toIconKey(tx) {
   return map[sub] || 'discretionary';
 }
 
-/* ── data load ─────────────────────────────────────────── */
 async function load() {
   loading.value = true;
   error.value = '';
@@ -138,7 +133,6 @@ onMounted(load);
 
     <ScrollFadeOverlay :isAtBottom="isAtBottom" />
 
-    <!-- 모달 -->
     <ExpenseDetailModal v-model="isModalOpen" :data="currentItem" />
   </BaseCard>
 </template>

@@ -78,3 +78,35 @@ export async function listTransactions({ page = 1, size = 50, from, to } = {}) {
   });
   return data?.data ?? { content: [], page: 1, size, totalElements: 0, totalPages: 0 };
 }
+
+// (get) 단건 조회
+export async function getTransactionById(id) {
+  try {
+    const { data } = await axios.get(`/api/transactions/${id}`, {
+      headers: { 'Cache-Control': 'no-cache' },
+    });
+
+    if (data?.success && data?.data) {
+      return data.data;
+    }
+    return data;
+  } catch {
+    //
+  }
+}
+
+// (fetch) 단건 일부 수정
+export async function updateTransaction(id, payload) {
+  try {
+    const { data } = await axios.patch(`/api/transactions/${id}`, payload, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (data?.success && data?.data) {
+      return data.data;
+    }
+    return data;
+  } catch {
+    //
+  }
+}

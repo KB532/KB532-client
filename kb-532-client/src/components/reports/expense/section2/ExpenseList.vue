@@ -3,7 +3,8 @@ import { ref, onMounted, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import ExpenseListItem from '@/components/reports/expense/ExpenseListItem.vue';
-import { listTransactions } from '@/api/transactions';
+import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.vue';
+import { listTransactions, getTransactionById } from '@/api/transactions';
 
 const props = defineProps({
   ym: { type: String, default: '' },
@@ -14,6 +15,10 @@ const props = defineProps({
 const loading = ref(false);
 const error = ref('');
 const sections = ref([]);
+
+const isModalOpen = ref(false);
+const modalLoading = ref(false);
+const selectedTransaction = ref(null);
 
 function defaultMonthRange(date = new Date()) {
   const y = date.getFullYear();
@@ -107,12 +112,35 @@ async function load() {
   }
 }
 
+async function onItemClick(id) {
+  console.debug('[expense-list] click:', id);
+
+  isModalOpen.value = true;
+  modalLoading.value = true;
+  selectedTransaction.value = null;
+
+  try {
+    const transactionDetail = await getTransactionById(id);
+
+    if (transactionDetail) {
+      selectedTransaction.value = {
+        id: transactionDetail.id ?? transactionDetail.transactionId ?? id,
+        name: transactionDetail.name ?? transactionDetail.merchant ?? '(내역)',
+        date: fmtTimestamp(transactionDetail.transactionDateTime),
+        amount: Math.abs(Number(transactionDetail.amount)),
+        category: transactionDetail.classification?.subcategory,
+        raw: transactionDetail,
+      };
+    }
+  } catch {
+    //
+  } finally {
+    modalLoading.value = false;
+  }
+}
+
 onMounted(load);
 watch(() => [props.ym, props.from, props.to], load);
-
-function onItemClick(id) {
-  console.debug('[expense-list] click:', id);
-}
 </script>
 
 <template>
@@ -131,11 +159,21 @@ function onItemClick(id) {
           <ExpenseListItem
             v-for="item in section.items"
             :key="item.id"
-            v-bind="item"
-            @click="onItemClick"
+            :id="item.id"
+            :category="item.category"
+            :name="item.name"
+            :date="item.date"
+            :amount="item.amount"
+            @click="onItemClick(item.id)"
           />
         </div>
       </div>
     </template>
+
+    <ExpenseDetailModal
+      :model-value="isModalOpen"
+      @update:model-value="isModalOpen = $event"
+      :data="selectedTransaction"
+    />
   </BaseCard>
 </template>
