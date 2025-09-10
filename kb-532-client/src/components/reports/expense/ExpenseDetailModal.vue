@@ -3,6 +3,7 @@ import { Icon } from '@iconify/vue';
 import SlidingModal from '@/components/common/Modal/SlidingModal.vue';
 import CategoryIcon from '@/components/common/Avatar/IconAvatar.vue';
 import Divider from '@/components/common/Divider/Divider.vue';
+import Switch from '@/components/common/Switch/Switch.vue';
 import { numberWithCommas } from '@/assets/utils/index.js';
 
 const props = defineProps({
@@ -50,10 +51,7 @@ const handleClose = () => {
       </div>
       <div class="flex items-center justify-between body1">
         <p class="text-kb-gray-dark">지출 합계에 포함</p>
-        <div class="flex gap-2 items-center">
-          <p class="text-blue-200">메모를 남겨보세요</p>
-          <Icon icon="material-symbols:arrow-back-ios-new-rounded" class="size-4 text-gray-600 -rotate-90" />
-        </div>
+        <Switch />
       </div>
       <Divider />
       <div class="flex items-center justify-between body1">
