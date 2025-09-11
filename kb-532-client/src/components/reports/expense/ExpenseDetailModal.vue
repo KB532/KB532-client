@@ -183,6 +183,6 @@ const categories = [
       </div>
     </div>
 
-    <DarkButton block class="mt-4">확인</DarkButton>
+    <DarkButton block class="mt-4 h-11">확인</DarkButton>
   </SlidingModal>
 </template>
