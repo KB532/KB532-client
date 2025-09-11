@@ -8,8 +8,8 @@ defineEmits(['select']);
 
 <template>
   <button class="preset" @click="$emit('select', values)">
-    <div class="subtitle2 text-kb-yellow-positive mb-3">{{ title }}</div>
-    <ul class="body2">
+    <div class="subtitle2 text-kb-yellow-positive mb-2">{{ title }}</div>
+    <ul class="body2 text-kb-gray-dark flex flex-col gap-1">
       <li>필수 {{ values.essential }}</li>
       <li>선택 {{ values.optional }}</li>
       <li>저축 {{ values.saving }}</li>

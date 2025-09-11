@@ -63,64 +63,57 @@ const onSave = async () => {
 <template>
   <TopMenuBar>50/30/20 목표 수정하기</TopMenuBar>
 
-  <div class="mt-20 p-4">
-    <!-- 프리셋 -->
-    <section class="panel mb-8">
-      <h3 class="title3 mb-4">대표 유형 추천</h3>
-      <PresetGrid :presets="presets" @select="applyPreset" />
-    </section>
+  <div class="flex flex-col justify-between min-h-[812px]">
+    <div class="mt-16">
+      <!-- 프리셋 -->
+      <section class="flex flex-col gap-4">
+        <h3 class="title3 text-black">대표 유형 추천</h3>
+        <PresetGrid :presets="presets" @select="applyPreset" />
+      </section>
 
-    <div class="-mx-8 my-4 h-[8px] bg-gray-200"></div>
+      <div class="-mx-8 my-4 h-[8px] bg-gray-200"></div>
 
-    <!-- 개인 목표 -->
-    <h3 class="title3 mb-4">개인 목표 설정</h3>
-    <EditablePercentRow label="필수" :color="'#5AA9FF'" v-model="form.essential" />
-    <EditablePercentRow label="선택" :color="'#FF8B8B'" v-model="form.optional"  />
-    <EditablePercentRow label="저축" :color="'#FFBC74'" v-model="form.saving"    />
-
-    <!-- 합계/안내 -->
-    <section class="mt-6">
-      <div class="flex items-baseline justify-between px-4 py-0">
-        <p class="text-sm text-gray-500">목표 합계</p>
-        <div class="flex items-baseline">
-          <p
-            class="body1 font-bold"
-            :class="{
-              'text-gray-900': sum === 100,
-              'text-red-500': sum > 100,
-              'text-gray-400': sum < 100,
-            }"
-          >
-            {{ sum }}
-          </p>
-          <span
-            class="text-xs"
-            :class="{
-              'text-gray-900': sum === 100,
-              'text-red-500': sum > 100,
-              'text-gray-400': sum < 100,
-            }"
-          >
-            %
-          </span>
+      <!-- 개인 목표 -->
+      <div class="flex flex-col gap-4">
+        <h3 class="title3">개인 목표 설정</h3>
+        <div class="flex flex-col gap-4">
+          <EditablePercentRow label="필수" :color="'#5AA9FF'" v-model="form.essential" />
+          <EditablePercentRow label="선택" :color="'#FF8B8B'" v-model="form.optional"  />
+          <EditablePercentRow label="저축" :color="'#FFBC74'" v-model="form.saving"    />
         </div>
+
+        <!-- 합계/안내 -->
+        <section>
+          <div class="flex items-center justify-between">
+            <p class="subtitle1 text-kb-gray-dark">목표 합계</p>
+            <p
+              class="title2 text-kb-yellow-positive"
+              :class="{
+              'text-gray-900': sum === 100,
+              'text-red-500': sum > 100,
+              'text-gray-400': sum < 100,
+            }"
+            >
+              {{ sum }}%
+            </p>
+          </div>
+
+          <p
+            v-if="sum !== 100"
+            class="px-4 pb-3 text-xs"
+            :class="sum > 100 ? 'text-red-500' : 'text-blue-500'"
+          >
+            {{ sum > 100 ? '합계는 100%를 초과할 수 없습니다.' : '합계가 100%가 되도록 조정해주세요.' }}
+          </p>
+
+          <p v-if="errorMsg" class="px-4 text-xs text-red-500">{{ errorMsg }}</p>
+        </section>
       </div>
-
-      <p
-        v-if="sum !== 100"
-        class="px-4 pb-3 text-xs"
-        :class="sum > 100 ? 'text-red-500' : 'text-blue-500'"
-      >
-        {{ sum > 100 ? '합계는 100%를 초과할 수 없습니다.' : '합계가 100%가 되도록 조정해주세요.' }}
-      </p>
-
-      <p v-if="errorMsg" class="px-4 text-xs text-red-500">{{ errorMsg }}</p>
-    </section>
-
+    </div>
     <!-- 저장 버튼 -->
     <SubmitButton
       block
-      class="mt-6"
+      class="mb-[34px]"
       :disabled="!valid || savingReq"
       @click="onSave"
     >

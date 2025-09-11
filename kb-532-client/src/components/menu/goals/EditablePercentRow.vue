@@ -41,7 +41,6 @@ const onInput = (e) => emit('update:modelValue', clamp(e.target.value));
   grid-template-columns: 80px 1fr 70px;
   align-items: center;
   gap: 10px;
-  padding: 12px 0;
 }
 .label {
   display: flex;

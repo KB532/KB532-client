@@ -15,8 +15,8 @@ const onClick = (e) => {
     :disabled="props.disabled"
     @click="onClick"
     :class="[
-      'rounded-lg text-white bg-kb-yellow-positive title3',
-      'hover:bg-kb-yellow-positive/90 active:bg-kb-yellow-positive/80',
+      'rounded-lg text-white bg-kb-gray-dark button1',
+      'hover:bg-kb-gray-dark/90 active:bg-kb-gray-dark/80',
       'px-4 h-[43px] leading-none',
       props.block ? 'w-full flex' : 'inline-flex',
       'items-center justify-center whitespace-nowrap',

@@ -1,11 +1,11 @@
 <script setup>
 import PresetCard from './PresetCard.vue';
 defineProps({ presets: { type: Array, required: true } });
-defineEmits(['select']); // (values) => void
+defineEmits(['select']);
 </script>
 
 <template>
-  <div class="presets">
+  <div class="flex gap-2">
     <PresetCard
       v-for="p in presets"
       :key="p.key"
@@ -15,11 +15,3 @@ defineEmits(['select']); // (values) => void
     />
   </div>
 </template>
-
-<style scoped>
-.presets {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-</style>
