@@ -33,6 +33,15 @@ const toggleDropdown = (key) => {
   openedDropdown.value = openedDropdown.value === key ? null : key;
 };
 
+const handleSelect = (key, value) => {
+  if (key === 'payment') {
+    paymentMethod.value = value;
+  } else if (key === 'category') {
+    category.value = value;
+  }
+  openedDropdown.value = null;
+}
+
 const categories = [
   '쇼핑',
   '보험·대출·기타금융',
@@ -82,7 +91,7 @@ const isFormValid = computed(() => {
         >
           <DropdownModal
             :data="['카드', '현금', '계좌이체']"
-            @select="(val) => { paymentMethod.value = val; openedDropdown.value = null; }"
+            @select="(v) => handleSelect('payment', v)"
           />
         </div>
       </div>
@@ -102,7 +111,7 @@ const isFormValid = computed(() => {
         >
           <DropdownModal
             :data="categories"
-            @select="(val) => { category.value = val; openedDropdown.value = null; }"
+            @select="(v) => handleSelect('category', v)"
           />
         </div>
       </div>

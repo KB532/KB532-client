@@ -10,10 +10,10 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(['select']);
+const emit = defineEmits(['select']);
 
 const handleClick = (item) => {
-  emits('select', item);
+  emit('select', item);
 }
 </script>
 
@@ -37,6 +37,7 @@ const handleClick = (item) => {
     <ul v-else class="bg-gray-100 body1 text-blue-200 w-fit rounded-xl max-h-44 overflow-auto text-center">
       <li
         v-for="(item, index) in props.data"
+        :key="index"
         :class="[
         'px-4 py-2 hover:bg-gray-300 active:bg-gray-300',
         index !== props.data.length - 1 ? 'border-b border-gray-300' : ''
