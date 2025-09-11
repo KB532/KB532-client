@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import ExpenseListItem from '@/components/reports/expense/ExpenseListItem.vue';
 import ScrollFadeOverlay from '@/components/common/Overlay/ScrollFadeOverlay.vue';
-import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.vue'; // 경로 확인
+import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.vue';
 import { listTransactions } from '@/api/transactions';
 
 const listRef = ref(null);

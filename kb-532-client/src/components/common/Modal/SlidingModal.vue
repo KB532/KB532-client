@@ -22,7 +22,7 @@ const model = computed({
 
 <template>
   <v-bottom-sheet v-model="model" :width="props.width">
-    <div class="bg-white rounded-t-xl p-4 pb-20 min-h-20">
+    <div class="bg-white rounded-t-xl p-4 pb-8 min-h-20">
       <slot />
     </div>
   </v-bottom-sheet>

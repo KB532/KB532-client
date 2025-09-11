@@ -4,8 +4,23 @@ import { Icon } from '@iconify/vue';
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import ExpenseListItem from '@/components/reports/expense/ExpenseListItem.vue';
 import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.vue';
+import AddExpenseModal from '@/components/reports/expense/AddExpenseModal.vue';
 import { listTransactions, getTransactionById } from '@/api/transactions';
 import { iconKeyFromSubcategory } from '@/utils/subcategoryIcon';
+
+const isAddModalOpen = ref(false);
+const isDetailModalOpen = ref(false);
+const currentItem = ref(null);
+
+const handleClickAddButton = () => {
+  isAddModalOpen.value = true;
+}
+
+const handleClickItem = (item) => {
+  console.debug('[expense-list] click:', id);
+  currentItem.value = item;
+  isDetailModalOpen.value = true;
+}
 
 const props = defineProps({
   ym: { type: String, default: '' },
@@ -33,6 +48,16 @@ function monthRangeFromYm(ym) {
   const [y, m] = ym.split('-').map((v) => +v);
   const iso = (d) => d.toISOString().slice(0, 10);
   return { from: iso(new Date(y, m - 1, 1)), to: iso(new Date(y, m, 0)) };
+}
+
+function last30DaysRange() {
+  const today = new Date();
+  const past = new Date();
+  past.setDate(today.getDate() - 30); // 오늘 기준 -30일
+
+  const iso = (d) => d.toISOString().slice(0, 10);
+
+  return { from: iso(past), to: iso(today) };
 }
 
 function safeDate(input) {
@@ -65,7 +90,7 @@ async function load() {
   try {
     let range = { from: props.from, to: props.to };
     if (!range.from || !range.to) {
-      range = props.ym ? monthRangeFromYm(props.ym) : defaultMonthRange();
+      range = props.ym ? monthRangeFromYm(props.ym) : last30DaysRange();
     }
 
     const res = await listTransactions({
@@ -194,11 +219,10 @@ watch(() => [props.ym, props.from, props.to], load);
   <BaseCard class="flex flex-col gap-3 relative">
     <Icon
       icon="material-symbols:add-2-rounded"
-      class="absolute top-4 right-4 size-6 rounded-full text-gray-600 hover:text-black active:text-black active:bg-gray-200 cursor-pointer"
+      class="fixed top-4 right-8 size-6 rounded-full text-gray-600 hover:text-black active:text-black active:bg-gray-200"
+      @click="handleClickAddButton"
     />
-
     <div v-if="!sections.length" class="px-4 py-3 text-gray-500">표시할 내역이 없습니다.</div>
-
     <template v-else>
       <div v-for="section in sections" :key="section.key" class="flex flex-col gap-2">
         <h1 class="subtitle1 text-black">{{ section.label }}</h1>
@@ -216,12 +240,25 @@ watch(() => [props.ym, props.from, props.to], load);
         </div>
       </div>
     </template>
-
+<!--    <h1 class="subtitle1 text-black">9월 8일</h1>-->
+<!--    <div class="flex flex-col -mx-4">-->
+<!--      <ExpenseListItem-->
+<!--        v-for="item in data"-->
+<!--        :key="item.id"-->
+<!--        :category="item.category"-->
+<!--        :name="item.name"-->
+<!--        :date="item.date"-->
+<!--        :amount="item.amount"-->
+<!--        @click="handleClickItem(item)"-->
+<!--      />-->
+<!--    </div>-->
+<!-- <ExpenseDetailModal v-model="isDetailModalOpen" :data="currentItem" />-->
     <ExpenseDetailModal
       :model-value="isModalOpen"
       @update:model-value="isModalOpen = $event"
       :data="selectedTransaction"
       @updated="handleUpdated"
     />
+    <AddExpenseModal v-model="isAddModalOpen" />
   </BaseCard>
 </template>

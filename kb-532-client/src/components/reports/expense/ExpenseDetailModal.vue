@@ -191,9 +191,13 @@ async function handleConfirm() {
       <Divider />
 
       <div class="relative">
-        <div class="flex items-center justify-between body1" @click="toggleDropdown('category')">
+        <div class="flex items-center justify-between body1">
           <p class="text-kb-gray-dark">카테고리 설정</p>
-          <DropdownItem :title="selectedCategory" :isOpen="openedDropdown === 'category'" />
+          <DropdownItem
+            :title="selectedCategory"
+            :isOpen="openedDropdown === 'category'"
+            @click="toggleDropdown('category')"
+          />
         </div>
         <div v-if="openedDropdown === 'category'" class="absolute right-0 mt-2 z-50">
           <DropdownModal :data="categories" @select="onSelectCategory" />
@@ -201,11 +205,12 @@ async function handleConfirm() {
       </div>
 
       <div class="relative">
-        <div class="flex items-center justify-between body1" @click="toggleDropdown('memo')">
+        <div class="flex items-center justify-between body1">
           <p class="text-kb-gray-dark">메모</p>
           <DropdownItem
             :title="memoText || '메모를 남겨보세요'"
             :isOpen="openedDropdown === 'memo'"
+            @click="toggleDropdown('memo')"
           />
         </div>
         <div v-if="openedDropdown === 'memo'" class="absolute right-0 mt-2 z-50">
@@ -221,9 +226,13 @@ async function handleConfirm() {
       <Divider />
 
       <div class="relative">
-        <div class="flex items-center justify-between body1" @click="toggleDropdown('payment')">
+        <div class="flex items-center justify-between body1">
           <p class="text-kb-gray-dark">결제 수단</p>
-          <DropdownItem :title="paymentMethod" :isOpen="openedDropdown === 'payment'" />
+          <DropdownItem
+            :title="paymentMethod"
+            :isOpen="openedDropdown === 'payment'"
+            @click="toggleDropdown('payment')"
+          />
         </div>
         <div v-if="openedDropdown === 'payment'" class="absolute right-0 mt-2 z-50">
           <DropdownModal :data="['카드', '현금', '계좌이체']" @select="onSelectPayment" />

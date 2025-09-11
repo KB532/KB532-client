@@ -14,6 +14,10 @@ const props = defineProps({
 
 const emits = defineEmits(['select', 'confirm']);
 
+const handleClick = (item) => {
+  emit('select', item);
+}
+
 const inputValue = ref('');
 const onConfirm = () => {
   const v = inputValue.value.trim();
@@ -47,10 +51,10 @@ const onConfirm = () => {
         v-for="(item, index) in props.data"
         :key="index"
         :class="[
-          'px-4 py-2 hover:bg-gray-300 active:bg-gray-300 cursor-pointer',
-          index !== props.data.length - 1 ? 'border-b border-gray-300' : '',
-        ]"
-        @click="$emit('select', item)"
+        'px-4 py-2 hover:bg-gray-300 active:bg-gray-300',
+        index !== props.data.length - 1 ? 'border-b border-gray-300' : ''
+      ]"
+        @click="handleClick(item)"
         @keyup.enter="$emit('select', item)"
         tabindex="0"
         role="button"
