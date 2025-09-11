@@ -9,6 +9,12 @@ const props = defineProps({
     default: 'list',
   },
 });
+
+const emits = defineEmits(['select']);
+
+const handleClick = (item) => {
+  emits('select', item);
+}
 </script>
 
 <template>
@@ -35,6 +41,7 @@ const props = defineProps({
         'px-4 py-2 hover:bg-gray-300 active:bg-gray-300',
         index !== props.data.length - 1 ? 'border-b border-gray-300' : ''
       ]"
+        @click="handleClick(item)"
       >
         {{ item }}
       </li>

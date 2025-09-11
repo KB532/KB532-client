@@ -20,8 +20,9 @@ const handleClose = () => {
   emits('update:modelValue', false);
 };
 
+// Todo: 드롭다운 선택 기능 개발하기... 오류 뜸 지금
 const openedDropdown = ref(null);
-const payment = ref('');
+const paymentMethod = ref('');
 const category = ref('');
 const date = ref('');
 const amount = ref('');
@@ -47,7 +48,7 @@ const categories = [
 
 const isFormValid = computed(() => {
   return (
-    payment.value &&
+    paymentMethod.value &&
     category.value &&
     date.value &&
     amount.value &&
@@ -70,7 +71,7 @@ const isFormValid = computed(() => {
         <div class="flex justify-between">
           <p class="body1 text-kb-gray-dark">결제 수단</p>
           <DropdownItem
-            :title="payment || '선택'"
+            :title="paymentMethod || '선택'"
             :isOpen="openedDropdown === 'payment'"
             @click="toggleDropdown('payment')"
           />
@@ -81,7 +82,7 @@ const isFormValid = computed(() => {
         >
           <DropdownModal
             :data="['카드', '현금', '계좌이체']"
-            @select="(val) => { payment.value = val; openedDropdown.value = null; }"
+            @select="(val) => { paymentMethod.value = val; openedDropdown.value = null; }"
           />
         </div>
       </div>
@@ -130,7 +131,9 @@ const isFormValid = computed(() => {
           v-model="amount"
           class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2 text-black"
           placeholder="지출 금액을 입력해 주세요"
-          type="number"
+          type="text"
+          inputmode="numeric"
+          @input="amount = amount.replace(/[^0-9]/g, '')"
         />
       </div>
       <div class="flex justify-between items-center">
