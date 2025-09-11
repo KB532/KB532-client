@@ -160,6 +160,7 @@ watch(() => [props.ym, props.from, props.to], load);
       :model-value="isModalOpen"
       @update:model-value="isModalOpen = $event"
       :data="selectedTransaction"
+      @updated="load()"
     />
   </BaseCard>
 </template>
