@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import SlidingModal from '@/components/common/Modal/SlidingModal.vue';
 import DropdownItem from '@/components/common/Item/DropdownItem.vue';
@@ -20,7 +20,6 @@ const handleClose = () => {
   emits('update:modelValue', false);
 };
 
-// Todo: 드롭다운 선택 기능 개발하기... 오류 뜸 지금
 const openedDropdown = ref(null);
 const paymentMethod = ref('');
 const category = ref('');
@@ -64,6 +63,25 @@ const isFormValid = computed(() => {
     name.value
   );
 });
+
+const resetForm = () => {
+  paymentMethod.value = '';
+  category.value = '';
+  date.value = '';
+  amount.value = '';
+  name.value = '';
+  memo.value = '';
+  openedDropdown.value = null;
+};
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (!newVal) {
+      resetForm();
+    }
+  }
+);
 </script>
 
 <template>
