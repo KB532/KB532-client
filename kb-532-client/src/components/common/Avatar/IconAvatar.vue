@@ -1,9 +1,9 @@
 <script setup>
 import { Icon } from '@iconify/vue';
+import { iconKeyFromSubcategory } from '@/utils/subcategoryIcon.js';
 
 const props = defineProps({
   category: String,
-  /** 배경(회색 원) 표시 여부 — 기본 true */
   bg: { type: Boolean, default: true },
   size: { type: String, default: 'size-6' },
   padding: { type: String, default: 'p-1.5' },
@@ -19,14 +19,13 @@ const categoryIcon = {
   home: { icon: 'f7:house-fill', color: 'text-[#2EA923]' },
   living: { icon: 'icon-park-solid:shopping', color: 'text-[#FF9A42]' },
   snacks: { icon: 'jam:coffee-cup-f', color: 'text-[#B066FF]' },
+  income: { icon: 'mdi:cash-plus', color: 'text-[#18A957]' },
   others: { icon: 'codex:etc-horisontal', color: 'text-gray-600' },
   unclassified: { icon: 'material-symbols:question-mark-rounded', color: 'text-red-200' },
 };
 
-const currentCategory = categoryIcon[props.category] || {
-  icon: 'material-symbols:question-mark-rounded',
-  color: 'text-gray-600',
-};
+const key = iconKeyFromSubcategory(props.category);
+const current = categoryIcon[key] || categoryIcon.unclassified;
 </script>
 
 <template>
@@ -36,6 +35,6 @@ const currentCategory = categoryIcon[props.category] || {
       bg ? `bg-gray-200 ${padding}` : 'bg-transparent p-0',
     ]"
   >
-    <Icon :icon="currentCategory.icon" :class="[currentCategory.color, size]" />
+    <Icon :icon="current.icon" :class="[current.color, size]" />
   </div>
 </template>
