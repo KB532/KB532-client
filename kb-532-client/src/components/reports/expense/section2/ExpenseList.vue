@@ -5,6 +5,7 @@ import BaseCard from '@/components/common/Card/BaseCard.vue';
 import ExpenseListItem from '@/components/reports/expense/ExpenseListItem.vue';
 import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.vue';
 import { listTransactions, getTransactionById } from '@/api/transactions';
+import { iconKeyFromSubcategory } from '@/utils/subcategoryIcon';
 
 const props = defineProps({
   ym: { type: String, default: '' },
@@ -85,7 +86,7 @@ async function load() {
           name: tx.name ?? tx.merchant ?? '(내역)',
           date: fmtTimestamp(tx.transactionDateTime),
           amount: Math.abs(Number(tx.amount)),
-          category: tx.classification?.subcategory,
+          category: iconKeyFromSubcategory(tx.classification?.subcategory),
           _dayKey: dayKey(tx.transactionDateTime),
           _sortTs: ts.getTime(),
         };
@@ -93,17 +94,11 @@ async function load() {
       .sort((a, b) => b._sortTs - a._sortTs);
 
     const groups = {};
-    for (const it of expenses) {
-      (groups[it._dayKey] ??= []).push(it);
-    }
+    for (const it of expenses) (groups[it._dayKey] ??= []).push(it);
 
     sections.value = Object.keys(groups)
       .sort((a, b) => new Date(b) - new Date(a))
-      .map((key) => ({
-        key,
-        label: dayLabelFromKey(key),
-        items: groups[key],
-      }));
+      .map((key) => ({ key, label: dayLabelFromKey(key), items: groups[key] }));
   } catch (e) {
     console.error(e);
     error.value = '지출 내역을 불러오지 못했습니다.';
@@ -114,16 +109,14 @@ async function load() {
 
 async function onItemClick(id) {
   console.debug('[expense-list] click:', id);
-
-  isModalOpen.value = true;
   modalLoading.value = true;
   selectedTransaction.value = null;
 
   try {
-    const transactionDetail = await getTransactionById(id);
-    if (transactionDetail) {
-      // ✅ 원본 객체 그대로 넣어줌
-      selectedTransaction.value = transactionDetail;
+    const tx = await getTransactionById(id);
+    if (tx) {
+      selectedTransaction.value = tx;
+      isModalOpen.value = true;
     }
   } catch (e) {
     console.error(e);
@@ -153,7 +146,7 @@ watch(() => [props.ym, props.from, props.to], load);
             v-for="item in section.items"
             :key="item.id"
             :id="item.id"
-            :category="item.category"
+            :category="item.category || 'uncategorized'"
             :name="item.name"
             :date="item.date"
             :amount="item.amount"
