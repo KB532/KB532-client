@@ -1,4 +1,3 @@
-<!-- src/components/reports/expense/ExpenseDetailModal.vue -->
 <script setup>
 import { ref, watch, computed } from 'vue';
 import { Icon } from '@iconify/vue';
@@ -15,13 +14,12 @@ import { updateTransaction, patchTransactionClassification } from '@/api/transac
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
-  data: { type: Object, default: null }, // getTransactionById 원본 객체
+  data: { type: Object, default: null },
 });
 
 const emits = defineEmits(['update:modelValue', 'updated']);
 const handleClose = () => emits('update:modelValue', false);
 
-/* UI 상태 */
 const openedDropdown = ref(null);
 const toggleDropdown = (key) => {
   openedDropdown.value = openedDropdown.value === key ? null : key;
@@ -33,7 +31,6 @@ const paymentMethod = ref('카드');
 const paidAt = ref('');
 const categoryIconKey = ref('uncategorized');
 
-/* 원본 → 라벨/표시값 변환 */
 function toCategoryLabel(d) {
   return d?.classification?.subcategory || '미분류';
 }
@@ -65,7 +62,6 @@ function toIconKey(d) {
   return key || 'uncategorized';
 }
 
-/* props.data 들어오면 초기화 */
 watch(
   () => props.data,
   (d) => {
@@ -79,12 +75,10 @@ watch(
   { immediate: true },
 );
 
-/* 원본 값(계산 속성) */
 const originalCategory = computed(() => toCategoryLabel(props.data || {}));
 const originalPayment = computed(() => toPaymentLabel(props.data || {}));
 const originalMemo = computed(() => props.data?.memo ?? '');
 
-/* 변경 여부 판단 */
 const isDirty = computed(
   () =>
     selectedCategory.value !== originalCategory.value ||
@@ -92,7 +86,6 @@ const isDirty = computed(
     memoText.value !== originalMemo.value,
 );
 
-/* 드롭다운 핸들러 */
 const onSelectCategory = (v) => {
   selectedCategory.value = v;
   openedDropdown.value = null;
@@ -106,7 +99,6 @@ const onSelectPayment = (v) => {
   openedDropdown.value = null;
 };
 
-/* 목록 */
 const categories = [
   '쇼핑',
   '보험·대출·기타금융',
@@ -120,7 +112,6 @@ const categories = [
   '기타 지출',
 ];
 
-/* 저장 로직 */
 const isSaving = ref(false);
 const saveError = ref('');
 
@@ -133,12 +124,11 @@ function paymentToServer(label) {
 
 async function handleConfirm() {
   if (!props.data?.id) return handleClose();
-  if (!isDirty.value) return; // 변경 없으면 아무 것도 안 함
+  if (!isDirty.value) return;
 
   isSaving.value = true;
   saveError.value = '';
 
-  // 변경된 필드만 전송
   const payload = {};
   if (memoText.value !== originalMemo.value) {
     payload.memo = memoText.value;
@@ -148,21 +138,17 @@ async function handleConfirm() {
   }
 
   try {
-    // 1) 일반 필드 변경이 있으면 PATCH /transactions/{id}
     if (Object.keys(payload).length > 0) {
       await updateTransaction(props.data.id, payload);
     }
 
-    // 2) 카테고리가 바뀌었으면 PATCH /transactions/{id}/classification
     if (selectedCategory.value !== originalCategory.value) {
       await patchTransactionClassification(props.data.id, {
         category: props.data?.classification?.category ?? 'DISCRETIONARY',
         subcategory: selectedCategory.value,
-        // 문서상 status는 서버가 USER_CORRECTED로 기록
       });
     }
 
-    // 3) 부모에게 갱신 알리고 닫기 (부모에서 load() 추천)
     emits('updated', { id: props.data.id });
     emits('update:modelValue', false);
   } catch (e) {
@@ -189,13 +175,11 @@ async function handleConfirm() {
     <div v-if="!props.data" class="p-4 text-center text-gray-500">불러오는 중...</div>
 
     <div v-else :key="props.data.id" class="flex flex-col gap-4 mt-8">
-      <!-- 상단: 아이콘 + 이름 -->
       <div class="flex gap-2 items-center">
         <CategoryIcon :key="categoryIconKey" class="size-8" :category="categoryIconKey" />
         <p class="body1 text-black">{{ props.data?.name }}</p>
       </div>
 
-      <!-- 금액 -->
       <div class="flex items-center gap-2">
         <h1 class="title1 text-black">
           -{{ numberWithCommas(Math.abs(props.data?.amount ?? 0)) }}원
@@ -205,7 +189,6 @@ async function handleConfirm() {
 
       <Divider />
 
-      <!-- 카테고리 설정 -->
       <div class="relative">
         <div class="flex items-center justify-between body1" @click="toggleDropdown('category')">
           <p class="text-kb-gray-dark">카테고리 설정</p>
@@ -216,7 +199,6 @@ async function handleConfirm() {
         </div>
       </div>
 
-      <!-- 메모 -->
       <div class="relative">
         <div class="flex items-center justify-between body1" @click="toggleDropdown('memo')">
           <p class="text-kb-gray-dark">메모</p>
@@ -230,7 +212,6 @@ async function handleConfirm() {
         </div>
       </div>
 
-      <!-- 지출 합계 포함 (필요 시 v-model로 연결해서 저장에 포함 가능) -->
       <div class="flex items-center justify-between body1">
         <p class="text-kb-gray-dark">지출 합계에 포함</p>
         <Switch />
@@ -238,7 +219,6 @@ async function handleConfirm() {
 
       <Divider />
 
-      <!-- 결제 수단 -->
       <div class="relative">
         <div class="flex items-center justify-between body1" @click="toggleDropdown('payment')">
           <p class="text-kb-gray-dark">결제 수단</p>
@@ -249,7 +229,6 @@ async function handleConfirm() {
         </div>
       </div>
 
-      <!-- 결제 일시 / 사용처 -->
       <div class="flex items-center justify-between body1 text-kb-gray-dark">
         <p>결제 일시</p>
         <p>{{ paidAt }}</p>
@@ -263,14 +242,12 @@ async function handleConfirm() {
       <p v-if="saveError" class="text-red-500 body2 mt-2">{{ saveError }}</p>
     </div>
 
-    <!-- 저장 버튼: 변경 없으면 비활성화 -->
     <DarkButton
       block
       class="mt-4 h-11 disabled:opacity-60"
       :disabled="isSaving || !props.data?.id || !isDirty"
       @click="handleConfirm"
     >
-      {{ isSaving ? '저장 중...' : isDirty ? '확인' : '변경 사항 없음' }}
     </DarkButton>
   </SlidingModal>
 </template>
