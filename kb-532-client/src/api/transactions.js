@@ -70,7 +70,6 @@ export async function getMonthlySpending({ month }) {
 }
 
 export async function listTransactions({ page = 1, size = 50, from, to } = {}) {
-  console.log("from, to", from, to);
   const { data } = await axios.get('/api/transactions', {
     params: { page, size, from, to, _t: Date.now() },
     headers: { 'Cache-Control': 'no-cache' },

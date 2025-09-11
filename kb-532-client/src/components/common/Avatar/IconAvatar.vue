@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { Icon } from '@iconify/vue';
 import { iconKeyFromSubcategory } from '@/utils/subcategoryIcon.js';
 
@@ -27,10 +27,6 @@ const categoryIcon = {
 
 const key = computed(() => iconKeyFromSubcategory(props.category));
 const current = computed(() => categoryIcon[key.value] || categoryIcon.unclassified);
-
-onMounted(() => {
-  console.log(props.category);
-});
 </script>
 
 <template>
