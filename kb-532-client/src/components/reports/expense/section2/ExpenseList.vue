@@ -125,6 +125,78 @@ async function onItemClick(id) {
   }
 }
 
+/** 업데이트된 단건을 리스트에 반영 (섹션 이동/정렬 포함) */
+function patchOne(updatedTx) {
+  if (!updatedTx?.id) return;
+
+  const newTs = safeDate(updatedTx.transactionDateTime);
+  const newKey = dayKey(updatedTx.transactionDateTime);
+  const newItem = {
+    id: updatedTx.id,
+    name: updatedTx.name ?? updatedTx.merchant ?? '(내역)',
+    date: fmtTimestamp(updatedTx.transactionDateTime),
+    amount: Math.abs(Number(updatedTx.amount)),
+    category: iconKeyFromSubcategory(updatedTx.classification?.subcategory),
+    _dayKey: newKey,
+    _sortTs: newTs.getTime(),
+  };
+
+  // 기존 위치 찾기
+  let fromSecIdx = -1;
+  let fromItemIdx = -1;
+  sections.value.some((sec, si) => {
+    const idx = sec.items.findIndex((it) => it.id === newItem.id);
+    if (idx !== -1) {
+      fromSecIdx = si;
+      fromItemIdx = idx;
+      return true;
+    }
+    return false;
+  });
+  if (fromItemIdx === -1) return;
+
+  const fromSec = sections.value[fromSecIdx];
+  const prevKey = fromSec.key;
+
+  // 섹션 키가 바뀌면 이동
+  if (newKey !== prevKey) {
+    // 기존 섹션에서 제거
+    fromSec.items.splice(fromItemIdx, 1);
+
+    // 대상 섹션 찾거나 생성
+    let target = sections.value.find((s) => s.key === newKey);
+    if (!target) {
+      target = { key: newKey, label: dayLabelFromKey(newKey), items: [] };
+      sections.value.push(target);
+      sections.value.sort((a, b) => new Date(b.key) - new Date(a.key));
+    }
+    target.items.push(newItem);
+    target.items.sort((a, b) => b._sortTs - a._sortTs);
+
+    // 기존 섹션 비면 제거
+    if (fromSec.items.length === 0) {
+      sections.value.splice(fromSecIdx, 1);
+    }
+  } else {
+    // 같은 섹션이면 자리에서 교체 후 정렬
+    fromSec.items.splice(fromItemIdx, 1, newItem);
+    fromSec.items.sort((a, b) => b._sortTs - a._sortTs);
+  }
+}
+
+/** 모달 저장 성공 후 호출되는 핸들러 */
+async function handleUpdated({ id }) {
+  try {
+    // 최신 단건을 다시 가져와서 정확히 반영
+    const fresh = await getTransactionById(id);
+    if (fresh) patchOne(fresh);
+  } catch (e) {
+    console.error('[handleUpdated] refetch failed, fallback to full reload', e);
+    // 실패하면 안전하게 전체 reload
+    await load();
+  }
+}
+
 onMounted(load);
 watch(() => [props.ym, props.from, props.to], load);
 </script>
@@ -160,7 +232,7 @@ watch(() => [props.ym, props.from, props.to], load);
       :model-value="isModalOpen"
       @update:model-value="isModalOpen = $event"
       :data="selectedTransaction"
-      @updated="load()"
+      @updated="handleUpdated"
     />
   </BaseCard>
 </template>
