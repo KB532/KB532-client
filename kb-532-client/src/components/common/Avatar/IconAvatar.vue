@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue';
 import { Icon } from '@iconify/vue';
 import { iconKeyFromSubcategory } from '@/utils/subcategoryIcon.js';
 
@@ -11,7 +12,7 @@ const props = defineProps({
 
 const categoryIcon = {
   shopping: { icon: 'mdi:shopping', color: 'text-[#00DE5A]' },
-  finance: { icon: 'material-symbols:health-and-safety-rounded', color: 'text-[#A180FF]' },
+  finance: { icon: 'material-symbols:health-and-safety-rounded', color: 'text-[#A180FF]' }, // 아이콘은 필요시 바꾸기
   food: { icon: 'material-symbols:fork-spoon-rounded', color: 'text-[#FFC831]' },
   transfer: { icon: 'grommet-icons:transaction', color: 'text-[#467CAA]' },
   transit: { icon: 'mdi:bus', color: 'text-[#4AC9FF]' },
@@ -24,17 +25,17 @@ const categoryIcon = {
   unclassified: { icon: 'material-symbols:question-mark-rounded', color: 'text-red-200' },
 };
 
-const key = iconKeyFromSubcategory(props.category);
-const current = categoryIcon[key] || categoryIcon.unclassified;
+const key = computed(() => iconKeyFromSubcategory(props.category));
+const current = computed(() => categoryIcon[key.value] || categoryIcon.unclassified);
 </script>
 
 <template>
   <div
     :class="[
       'inline-flex items-center justify-center rounded-full',
-      bg ? `bg-gray-200 ${padding}` : 'bg-transparent p-0',
+      props.bg ? `bg-gray-200 ${props.padding}` : 'bg-transparent p-0',
     ]"
   >
-    <Icon :icon="current.icon" :class="[current.color, size]" />
+    <Icon :icon="current.icon" :class="[current.color, props.size]" />
   </div>
 </template>

@@ -5,7 +5,8 @@ import BaseCard from '@/components/common/Card/BaseCard.vue';
 import ExpenseListItem from '@/components/reports/expense/ExpenseListItem.vue';
 import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.vue';
 import AddExpenseModal from '@/components/reports/expense/AddExpenseModal.vue';
-import { listTransactions } from '@/api/transactions';
+import { listTransactions, getTransactionById } from '@/api/transactions';
+import { iconKeyFromSubcategory } from '@/utils/subcategoryIcon';
 
 const isAddModalOpen = ref(false);
 const isDetailModalOpen = ref(false);
@@ -30,6 +31,10 @@ const props = defineProps({
 const loading = ref(false);
 const error = ref('');
 const sections = ref([]);
+
+const isModalOpen = ref(false);
+const modalLoading = ref(false);
+const selectedTransaction = ref(null);
 
 function defaultMonthRange(date = new Date()) {
   const y = date.getFullYear();
@@ -106,7 +111,7 @@ async function load() {
           name: tx.name ?? tx.merchant ?? '(내역)',
           date: fmtTimestamp(tx.transactionDateTime),
           amount: Math.abs(Number(tx.amount)),
-          category: tx.classification?.subcategory,
+          category: iconKeyFromSubcategory(tx.classification?.subcategory),
           _dayKey: dayKey(tx.transactionDateTime),
           _sortTs: ts.getTime(),
         };
@@ -114,17 +119,11 @@ async function load() {
       .sort((a, b) => b._sortTs - a._sortTs);
 
     const groups = {};
-    for (const it of expenses) {
-      (groups[it._dayKey] ??= []).push(it);
-    }
+    for (const it of expenses) (groups[it._dayKey] ??= []).push(it);
 
     sections.value = Object.keys(groups)
       .sort((a, b) => new Date(b) - new Date(a))
-      .map((key) => ({
-        key,
-        label: dayLabelFromKey(key),
-        items: groups[key],
-      }));
+      .map((key) => ({ key, label: dayLabelFromKey(key), items: groups[key] }));
   } catch (e) {
     console.error(e);
     error.value = '지출 내역을 불러오지 못했습니다.';
@@ -133,12 +132,87 @@ async function load() {
   }
 }
 
+async function onItemClick(id) {
+  console.debug('[expense-list] click:', id);
+  modalLoading.value = true;
+  selectedTransaction.value = null;
+
+  try {
+    const tx = await getTransactionById(id);
+    if (tx) {
+      selectedTransaction.value = tx;
+      isModalOpen.value = true;
+    }
+  } catch (e) {
+    console.error(e);
+  } finally {
+    modalLoading.value = false;
+  }
+}
+
+function patchOne(updatedTx) {
+  if (!updatedTx?.id) return;
+
+  const newTs = safeDate(updatedTx.transactionDateTime);
+  const newKey = dayKey(updatedTx.transactionDateTime);
+  const newItem = {
+    id: updatedTx.id,
+    name: updatedTx.name ?? updatedTx.merchant ?? '(내역)',
+    date: fmtTimestamp(updatedTx.transactionDateTime),
+    amount: Math.abs(Number(updatedTx.amount)),
+    category: iconKeyFromSubcategory(updatedTx.classification?.subcategory),
+    _dayKey: newKey,
+    _sortTs: newTs.getTime(),
+  };
+
+  let fromSecIdx = -1;
+  let fromItemIdx = -1;
+  sections.value.some((sec, si) => {
+    const idx = sec.items.findIndex((it) => it.id === newItem.id);
+    if (idx !== -1) {
+      fromSecIdx = si;
+      fromItemIdx = idx;
+      return true;
+    }
+    return false;
+  });
+  if (fromItemIdx === -1) return;
+
+  const fromSec = sections.value[fromSecIdx];
+  const prevKey = fromSec.key;
+
+  if (newKey !== prevKey) {
+    fromSec.items.splice(fromItemIdx, 1);
+
+    let target = sections.value.find((s) => s.key === newKey);
+    if (!target) {
+      target = { key: newKey, label: dayLabelFromKey(newKey), items: [] };
+      sections.value.push(target);
+      sections.value.sort((a, b) => new Date(b.key) - new Date(a.key));
+    }
+    target.items.push(newItem);
+    target.items.sort((a, b) => b._sortTs - a._sortTs);
+
+    if (fromSec.items.length === 0) {
+      sections.value.splice(fromSecIdx, 1);
+    }
+  } else {
+    fromSec.items.splice(fromItemIdx, 1, newItem);
+    fromSec.items.sort((a, b) => b._sortTs - a._sortTs);
+  }
+}
+
+async function handleUpdated({ id }) {
+  try {
+    const fresh = await getTransactionById(id);
+    if (fresh) patchOne(fresh);
+  } catch {
+    await load();
+  }
+}
+
 onMounted(load);
 watch(() => [props.ym, props.from, props.to], load);
-
-function onItemClick(id) {
-  console.debug('[expense-list] click:', id);
-}
 </script>
 
 <template>
@@ -156,8 +230,12 @@ function onItemClick(id) {
           <ExpenseListItem
             v-for="item in section.items"
             :key="item.id"
-            v-bind="item"
-            @click="onItemClick"
+            :id="item.id"
+            :category="item.category || 'uncategorized'"
+            :name="item.name"
+            :date="item.date"
+            :amount="item.amount"
+            @click="onItemClick(item.id)"
           />
         </div>
       </div>
@@ -174,7 +252,13 @@ function onItemClick(id) {
 <!--        @click="handleClickItem(item)"-->
 <!--      />-->
 <!--    </div>-->
-    <ExpenseDetailModal v-model="isDetailModalOpen" :data="currentItem" />
+<!-- <ExpenseDetailModal v-model="isDetailModalOpen" :data="currentItem" />-->
+    <ExpenseDetailModal
+      :model-value="isModalOpen"
+      @update:model-value="isModalOpen = $event"
+      :data="selectedTransaction"
+      @updated="handleUpdated"
+    />
     <AddExpenseModal v-model="isAddModalOpen" />
   </BaseCard>
 </template>

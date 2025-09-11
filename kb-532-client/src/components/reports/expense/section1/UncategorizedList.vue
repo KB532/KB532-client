@@ -133,7 +133,6 @@ onMounted(load);
 
     <ScrollFadeOverlay :isAtBottom="isAtBottom" />
 
-    <!-- 모달 -->
     <ExpenseDetailModal v-model="isModalOpen" :data="currentItem" />
   </BaseCard>
 </template>

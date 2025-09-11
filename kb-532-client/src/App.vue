@@ -24,26 +24,28 @@ watch(answered, (newVal) => {
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen">
-    <TopAppBar v-if="showLayout" class="fixed inset-x-0 top-0 bg-white z-10" />
+  <v-app>
+    <div class="flex flex-col min-h-screen">
+      <TopAppBar v-if="showLayout" class="fixed inset-x-0 top-0 bg-white z-10" />
 
-    <main
-      :class="[
-        'flex-1 w-full mx-auto max-w-[375px]',
-        mainPxClass,
-        pageBgClass,
-        { 'pt-14 pb-[80px]': showLayout },
-      ]"
-    >
-      <div class="p-0 h-full">
-        <RouterView />
-        <ToastNotification />
-      </div>
-    </main>
+      <main
+        :class="[
+          'flex-1 w-full mx-auto max-w-[375px]',
+          mainPxClass,
+          pageBgClass,
+          { 'pt-14 pb-[80px]': showLayout },
+        ]"
+      >
+        <div class="p-0 h-full">
+          <RouterView />
+          <ToastNotification />
+        </div>
+      </main>
 
-    <BottomNavigationBar
-      v-if="showLayout"
-      class="fixed inset-x-0 bottom-0 h-[80px] bg-white z-10"
-    />
-  </div>
+      <BottomNavigationBar
+        v-if="showLayout"
+        class="fixed inset-x-0 bottom-0 h-[80px] bg-white z-10"
+      />
+    </div>
+  </v-app>
 </template>

@@ -77,3 +77,57 @@ export async function listTransactions({ page = 1, size = 50, from, to } = {}) {
   });
   return data?.data ?? { content: [], page: 1, size, totalElements: 0, totalPages: 0 };
 }
+
+// (get) 단건 조회
+export async function getTransactionById(id) {
+  try {
+    const { data } = await axios.get(`/api/transactions/${id}`, {
+      headers: { 'Cache-Control': 'no-cache' },
+    });
+
+    if (data?.success && data?.data) {
+      return data.data;
+    }
+    return data;
+  } catch {
+    //
+  }
+}
+
+// (fetch) 단건 일부 수정
+export async function updateTransaction(id, payload) {
+  try {
+    const { data } = await axios.patch(`/api/transactions/${id}`, payload, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (data?.success && data?.data) {
+      return data.data;
+    }
+    return data;
+  } catch {
+    //
+  }
+}
+
+// 거래 분류 보정
+export async function patchTransactionClassification(id, payload) {
+  try {
+    const { data } = await axios.patch(`/api/transactions/${id}/classification`, payload, {
+      params: { _t: Date.now() },
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache',
+      },
+    });
+
+    if (data?.success && data?.data) return data.data;
+    return data?.data ?? data ?? null;
+  } catch (err) {
+    const msg =
+      err?.response?.data?.error?.message ||
+      (err?.response ? `HTTP ${err.response.status}` : err?.message) ||
+      'Unknown error';
+    throw new Error(msg);
+  }
+}
