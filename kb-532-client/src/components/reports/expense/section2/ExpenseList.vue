@@ -121,19 +121,12 @@ async function onItemClick(id) {
 
   try {
     const transactionDetail = await getTransactionById(id);
-
     if (transactionDetail) {
-      selectedTransaction.value = {
-        id: transactionDetail.id ?? transactionDetail.transactionId ?? id,
-        name: transactionDetail.name ?? transactionDetail.merchant ?? '(내역)',
-        date: fmtTimestamp(transactionDetail.transactionDateTime),
-        amount: Math.abs(Number(transactionDetail.amount)),
-        category: transactionDetail.classification?.subcategory,
-        raw: transactionDetail,
-      };
+      // ✅ 원본 객체 그대로 넣어줌
+      selectedTransaction.value = transactionDetail;
     }
-  } catch {
-    //
+  } catch (e) {
+    console.error(e);
   } finally {
     modalLoading.value = false;
   }
