@@ -15,7 +15,7 @@ const props = defineProps({
   modelValue: Boolean,
 });
 
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue', 'updated']);
 
 const handleClose = () => {
   emits('update:modelValue', false);
@@ -33,6 +33,11 @@ const memo = ref('');
 const toggleDropdown = (key) => {
   openedDropdown.value = openedDropdown.value === key ? null : key;
 };
+
+const handleAmountInput = (e) => {
+  const numeric = e.target.value.replace(/[^0-9]/g, '');
+  amount.value = numberWithCommas(numeric);
+}
 
 const handleSelect = (key, value) => {
   if (key === 'payment') {
@@ -81,12 +86,13 @@ const submitFrom = async () => {
     transactionDateTime: formatDateTimeLocal(date.value),
     name: name.value,
     merchant: merchant.value,
-    amount: amount.value,
+    amount: -Math.abs(Number(amount.value.replace(/,/g, ''))),
     method: paymentMethod.value,
     memo: memo.value,
   });
 
   if (result.success) {
+    emits('updated');
     handleClose();
   } else {
     console.log("등록 실패");
@@ -133,26 +139,6 @@ watch(
         </div>
       </div>
 
-      <div class="relative">
-        <div class="flex justify-between">
-          <p class="body1 text-kb-gray-dark">지출 카테고리</p>
-          <DropdownItem
-            :title="category || '선택'"
-            :isOpen="openedDropdown === 'category'"
-            @click="toggleDropdown('category')"
-          />
-        </div>
-        <div
-          v-if="openedDropdown === 'category'"
-          class="absolute right-0 mt-2 z-50"
-        >
-          <DropdownModal
-            :data="categories"
-            @select="(v) => handleSelect('category', v)"
-          />
-        </div>
-      </div>
-
       <div class="flex justify-between items-center">
         <p class="body1 text-kb-gray-dark">지출 일시</p>
         <div class="w-3/4">
@@ -187,7 +173,7 @@ watch(
           placeholder="지출 금액을 입력해 주세요"
           type="text"
           inputmode="numeric"
-          @input="amount = amount.replace(/[^0-9]/g, '')"
+          @input="handleAmountInput"
         />
       </div>
       <div class="flex justify-between items-center">
