@@ -5,7 +5,7 @@ import { getLatestBudgetTarget } from '@/api/budget'
 
 
 const props = defineProps({
-  segments:  { type: Array, default: null }, 
+  segments:  { type: Array, default: null },
   autoFetch: { type: Boolean, default: true },
 })
 
@@ -59,24 +59,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-[300px]">
-    <!-- 라벨 -->
-    <div class="relative h-5 mb-1">
-      <div
-        v-for="s in enriched"
-        :key="s.label"
-        class="absolute -translate-x-1/2 transform flex items-baseline caption3 whitespace-nowrap"
-        :style="{ left: s.center + '%' }"  
-      >
-        <p class="caption3">
-          {{ s.label }} {{ s.value }}
-          <span class="text-[6px] text-gray-600">%</span>
-        </p>
-      </div>
-    </div>
-
+  <div class="w-[300px] flex flex-col gap-2 mb-4">
     <!-- 누적 막대 -->
-    <div class="flex h-[7px] w-full overflow-hidden rounded-full bg-gray-200">
+    <div class="flex h-3 w-full overflow-hidden rounded-full bg-gray-200">
       <div
         v-for="(s, i) in enriched"
         :key="s.label"
@@ -90,6 +75,21 @@ onMounted(async () => {
           borderBottomRightRadius: i === enriched.length - 1 ? '999px' : 0,
         }"
       />
+    </div>
+
+    <!-- 라벨 -->
+    <div class="relative">
+      <div
+        v-for="s in enriched"
+        :key="s.label"
+        class="absolute -translate-x-1/2 transform flex items-baseline caption3 whitespace-nowrap"
+        :style="{ left: s.center + '%' }"
+      >
+        <p class="caption2 text-kb-gray-dark">
+          {{ s.label }} {{ s.value }}
+          <span class="text-gray-600">%</span>
+        </p>
+      </div>
     </div>
   </div>
 </template>

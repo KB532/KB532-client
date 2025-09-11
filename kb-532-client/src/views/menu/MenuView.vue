@@ -22,29 +22,28 @@ const alarm1 = ref(true);
 const alarm2 = ref(true);
 const alarm3 = ref(true);
 
-// const onEditGoals = () => console.log('목표 수정하기')
 const onEditGoals = () => router.push({ name: 'goal-edit' });
 </script>
 
 <template>
   <main class="content p-4">
-    <GreetingBlock :username="username" @profile="() => console.log('프로필 설정')" />
+    <div class="flex flex-col gap-4">
+      <GreetingBlock :username="username" @profile="() => console.log('프로필 설정')" />
+      <GoalsCard :goals="goals" @edit="onEditGoals" />
+    </div>
 
-    <GoalsCard :goals="goals" @edit="onEditGoals" />
     <div class="-mx-4 my-4 h-[8px] bg-gray-200"></div>
 
     <SettingsGroup title="알람 설정">
-      <SettingItemToggle label="알림 여부" v-model="alarmMain" class="mt-2" />
+      <SettingItemToggle label="알림 여부" v-model="alarmMain" />
     </SettingsGroup>
 
     <div class="-mx-4 my-4 h-[8px] bg-gray-200"></div>
 
     <SettingsGroup title="환경 설정">
-      <div class="space-y-3 mt-2">
-        <SettingItemToggle label="간편 로그인" v-model="alarm1" />
-        <SettingItemToggle label="간편 모드" v-model="alarm2" />
-        <SettingItemToggle label="다크모드" v-model="alarm3" />
-      </div>
+      <SettingItemToggle label="간편 로그인" v-model="alarm1" />
+      <SettingItemToggle label="간편 모드" v-model="alarm2" />
+      <SettingItemToggle label="다크모드" v-model="alarm3" />
     </SettingsGroup>
 
     <div style="height: 80px" />

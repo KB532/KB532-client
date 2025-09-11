@@ -10,8 +10,8 @@ defineEmits(['update:modelValue']);
 </script>
 
 <template>
-  <div class="flex items-center justify-between mx-3">
-    <span class="caption2">{{ label }}</span>
+  <div class="flex items-center justify-between">
+    <span class="subtitle2 text-kb-gray-dark">{{ label }}</span>
     <ToggleSwitch
       :model-value="modelValue"
       :disabled="disabled"
