@@ -12,7 +12,7 @@ const months = ref([]);
 const averageSavings = computed(() => {
   if (!months.value.length) return 0;
   const total = months.value.reduce((s, m) => s + (m.amount || 0), 0);
-  return Math.round(total / months.value.length / 10000);
+  return total;
 });
 
 async function load() {
