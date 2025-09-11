@@ -21,18 +21,21 @@ export function iconKeyFromSubcategory(input) {
   ]);
   const aliases = {
     snack: 'snacks',
+    snacks: 'snacks',
     transport: 'transit',
     uncategorized: 'unclassified',
   };
   if (known.has(lower)) return lower;
   if (aliases[lower]) return aliases[lower];
 
-  const norm = raw.replace(/[/\]/g, '·').replace(/[ㆍ·]/g, '·').replace(/\s+/g, '');
+  const norm = raw.replace(/[\\/]/g, '·').replace(/[ㆍ·]/g, '·').replace(/\s+/g, '');
 
   const exact = {
     쇼핑: 'shopping',
+
     '카페·간식': 'snacks',
     간식: 'snacks',
+
     외식: 'food',
     식비: 'food',
 

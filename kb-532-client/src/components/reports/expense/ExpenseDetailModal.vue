@@ -247,7 +247,7 @@ async function handleConfirm() {
       class="mt-4 h-11 disabled:opacity-60"
       :disabled="isSaving || !props.data?.id || !isDirty"
       @click="handleConfirm"
-    >
+      >확인
     </DarkButton>
   </SlidingModal>
 </template>
