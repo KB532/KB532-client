@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { iconKeyFromSubcategory } from '../utils/subcategoryIcon.js';
 
-// weekly
+// 주간 지출 내역 데이터 조회
 export async function getWeeklySpending({ weeks = 5 } = {}) {
   try {
     const { data } = await axios.get(`/api/transactions/weekly`, {
@@ -28,7 +28,7 @@ export async function getWeeklySpending({ weeks = 5 } = {}) {
   }
 }
 
-// monthly
+// 월간 지출 내역 데이터 조회
 export async function getMonthlySpending({ month }) {
   const { data } = await axios.get(`/api/transactions/monthly`, { params: { month } });
   const d = data?.data || {};
@@ -78,7 +78,7 @@ export async function listTransactions({ page = 1, size = 50, from, to } = {}) {
   return data?.data ?? { content: [], page: 1, size, totalElements: 0, totalPages: 0 };
 }
 
-// (get) 단건 조회
+// 지출 내역 데이터 단건 조회
 export async function getTransactionById(id) {
   try {
     const { data } = await axios.get(`/api/transactions/${id}`, {
@@ -94,7 +94,7 @@ export async function getTransactionById(id) {
   }
 }
 
-// (fetch) 단건 일부 수정
+// 지출 내역 데이터 수정
 export async function updateTransaction(id, payload) {
   try {
     const { data } = await axios.patch(`/api/transactions/${id}`, payload, {
@@ -110,7 +110,7 @@ export async function updateTransaction(id, payload) {
   }
 }
 
-// 거래 분류 보정
+// 지출 커테고리 수정
 export async function patchTransactionClassification(id, payload) {
   try {
     const { data } = await axios.patch(`/api/transactions/${id}/classification`, payload, {
@@ -129,5 +129,21 @@ export async function patchTransactionClassification(id, payload) {
       (err?.response ? `HTTP ${err.response.status}` : err?.message) ||
       'Unknown error';
     throw new Error(msg);
+  }
+}
+
+// 지출 내역 등록
+export async function postTransaction(payload) {
+  try {
+    const { data } = await axios.post(`/api/transactions`, payload, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (data?.success && data?.data) {
+      return data;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
   }
 }

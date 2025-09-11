@@ -259,6 +259,9 @@ watch(() => [props.ym, props.from, props.to], load);
       :data="selectedTransaction"
       @updated="handleUpdated"
     />
-    <AddExpenseModal v-model="isAddModalOpen" />
+    <AddExpenseModal
+      v-model="isAddModalOpen"
+      @updated="load"
+    />
   </BaseCard>
 </template>

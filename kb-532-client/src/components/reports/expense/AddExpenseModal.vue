@@ -5,7 +5,8 @@ import SlidingModal from '@/components/common/Modal/SlidingModal.vue';
 import DropdownItem from '@/components/common/Item/DropdownItem.vue';
 import DropdownModal from '@/components/common/Modal/DropdownModal.vue';
 import DarkButton from '@/components/common/Button/DarkButton.vue';
-import { numberWithCommas } from '@/assets/utils/index.js';
+import { numberWithCommas, formatDateTimeLocal } from '@/assets/utils/index.js';
+import { postTransaction } from "@/api/transactions.js";
 
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -14,7 +15,7 @@ const props = defineProps({
   modelValue: Boolean,
 });
 
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue', 'updated']);
 
 const handleClose = () => {
   emits('update:modelValue', false);
@@ -24,6 +25,7 @@ const openedDropdown = ref(null);
 const paymentMethod = ref('');
 const category = ref('');
 const date = ref('');
+const merchant = ref('');
 const amount = ref('');
 const name = ref('');
 const memo = ref('');
@@ -31,6 +33,11 @@ const memo = ref('');
 const toggleDropdown = (key) => {
   openedDropdown.value = openedDropdown.value === key ? null : key;
 };
+
+const handleAmountInput = (e) => {
+  const numeric = e.target.value.replace(/[^0-9]/g, '');
+  amount.value = numberWithCommas(numeric);
+}
 
 const handleSelect = (key, value) => {
   if (key === 'payment') {
@@ -74,6 +81,24 @@ const resetForm = () => {
   openedDropdown.value = null;
 };
 
+const submitFrom = async () => {
+  const result = await postTransaction({
+    transactionDateTime: formatDateTimeLocal(date.value),
+    name: name.value,
+    merchant: merchant.value,
+    amount: -Math.abs(Number(amount.value.replace(/,/g, ''))),
+    method: paymentMethod.value,
+    memo: memo.value,
+  });
+
+  if (result.success) {
+    emits('updated');
+    handleClose();
+  } else {
+    console.log("등록 실패");
+  }
+}
+
 watch(
   () => props.modelValue,
   (newVal) => {
@@ -114,26 +139,6 @@ watch(
         </div>
       </div>
 
-      <div class="relative">
-        <div class="flex justify-between">
-          <p class="body1 text-kb-gray-dark">지출 카테고리</p>
-          <DropdownItem
-            :title="category || '선택'"
-            :isOpen="openedDropdown === 'category'"
-            @click="toggleDropdown('category')"
-          />
-        </div>
-        <div
-          v-if="openedDropdown === 'category'"
-          class="absolute right-0 mt-2 z-50"
-        >
-          <DropdownModal
-            :data="categories"
-            @select="(v) => handleSelect('category', v)"
-          />
-        </div>
-      </div>
-
       <div class="flex justify-between items-center">
         <p class="body1 text-kb-gray-dark">지출 일시</p>
         <div class="w-3/4">
@@ -153,6 +158,14 @@ watch(
       </div>
 
       <div class="flex justify-between items-center">
+        <p class="body1 text-kb-gray-dark">지출처</p>
+        <input
+          v-model="merchant"
+          class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2 text-black"
+          placeholder="지출처를 입력해 주세요"
+        />
+      </div>
+      <div class="flex justify-between items-center">
         <p class="body1 text-kb-gray-dark">금액</p>
         <input
           v-model="amount"
@@ -160,7 +173,7 @@ watch(
           placeholder="지출 금액을 입력해 주세요"
           type="text"
           inputmode="numeric"
-          @input="amount = amount.replace(/[^0-9]/g, '')"
+          @input="handleAmountInput"
         />
       </div>
       <div class="flex justify-between items-center">
@@ -180,7 +193,13 @@ watch(
           maxlength="50"
         />
       </div>
-      <DarkButton class="mt-2" :disabled="!isFormValid">등록하기</DarkButton>
+      <DarkButton
+        class="mt-2"
+        :disabled="!isFormValid"
+        @click="submitFrom"
+      >
+        등록하기
+      </DarkButton>
     </div>
   </SlidingModal>
 </template>
