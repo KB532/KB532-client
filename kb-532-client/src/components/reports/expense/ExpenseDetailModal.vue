@@ -10,13 +10,14 @@ import DropdownModal from '@/components/common/Modal/DropdownModal.vue';
 import { numberWithCommas } from '@/assets/utils/index.js';
 import DarkButton from '@/components/common/Button/DarkButton.vue';
 import { iconKeyFromSubcategory } from '@/utils/subcategoryIcon';
+import { updateTransaction } from '@/api/transactions';
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
   data: { type: Object, default: null },
 });
 
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue', 'updated']);
 
 const handleClose = () => emits('update:modelValue', false);
 
@@ -62,12 +63,10 @@ function toIconKey(d) {
   return key || 'uncategorized';
 }
 
-/* props.data 변하면 갱신 */
 watch(
   () => props.data,
   (d) => {
     if (!d) return;
-    // console.log('[ExpenseDetailModal] data =', d);
     selectedCategory.value = toCategoryLabel(d);
     paymentMethod.value = toPaymentLabel(d);
     paidAt.value = toPaidAt(d);
@@ -103,6 +102,45 @@ const categories = [
   '카페·간식',
   '기타 지출',
 ];
+
+const isSaving = ref(false);
+const saveError = ref('');
+
+function paymentToServer(label) {
+  if (label === '카드') return 'CARD';
+  if (label === '현금') return 'CASH';
+  if (label === '계좌이체') return 'TRANSFER';
+  return 'CARD';
+}
+
+async function handleConfirm() {
+  if (!props.data?.id) {
+    return handleClose();
+  }
+
+  isSaving.value = true;
+  saveError.value = '';
+
+  const payload = {
+    memo: memoText.value,
+    method: paymentToServer(paymentMethod.value),
+    classification: {
+      category: props.data?.classification?.category ?? 'DISCRETIONARY',
+      subcategory: selectedCategory.value,
+    },
+  };
+
+  try {
+    const updated = await updateTransaction(props.data.id, payload);
+    emits('updated', updated ?? payload);
+    emits('update:modelValue', false);
+  } catch (e) {
+    console.error('[ExpenseDetailModal] update error:', e);
+    saveError.value = '저장에 실패했어요. 잠시 후 다시 시도해 주세요.';
+  } finally {
+    isSaving.value = false;
+  }
+}
 </script>
 
 <template>
@@ -181,8 +219,17 @@ const categories = [
         <p>사용처</p>
         <p>{{ props.data?.merchant || props.data?.name }}</p>
       </div>
+
+      <p v-if="saveError" class="text-red-500 body2 mt-2">{{ saveError }}</p>
     </div>
 
-    <DarkButton block class="mt-4 h-11">확인</DarkButton>
+    <DarkButton
+      block
+      class="mt-4 h-11 disabled:opacity-60"
+      :disabled="isSaving || !props.data?.id"
+      @click="handleConfirm"
+    >
+      {{ isSaving ? '저장 중...' : '확인' }}
+    </DarkButton>
   </SlidingModal>
 </template>
