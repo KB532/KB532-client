@@ -110,7 +110,7 @@ export async function updateTransaction(id, payload) {
   }
 }
 
-// 거래 분류 보정
+// 지출 커테고리 수정
 export async function patchTransactionClassification(id, payload) {
   try {
     const { data } = await axios.patch(`/api/transactions/${id}/classification`, payload, {

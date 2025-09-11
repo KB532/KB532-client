@@ -6,6 +6,7 @@ import DropdownItem from '@/components/common/Item/DropdownItem.vue';
 import DropdownModal from '@/components/common/Modal/DropdownModal.vue';
 import DarkButton from '@/components/common/Button/DarkButton.vue';
 import { numberWithCommas } from '@/assets/utils/index.js';
+import { postTransaction } from "@/api/transactions.js";
 
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -73,6 +74,23 @@ const resetForm = () => {
   memo.value = '';
   openedDropdown.value = null;
 };
+
+const submitFrom = async () => {
+  const result = await postTransaction({
+    transactionDateTime: date.value,
+    name: name.value,
+    merchant: '',
+    amount: amount.value,
+    method: paymentMethod.value,
+    memo: memo.value,
+  });
+
+  if (result.data === 200) {
+    handleClose();
+  } else {
+    console.log("등록 실패");
+  }
+}
 
 watch(
   () => props.modelValue,
@@ -180,7 +198,13 @@ watch(
           maxlength="50"
         />
       </div>
-      <DarkButton class="mt-2" :disabled="!isFormValid">등록하기</DarkButton>
+      <DarkButton
+        class="mt-2"
+        :disabled="!isFormValid"
+        @click="submitFrom"
+      >
+        등록하기
+      </DarkButton>
     </div>
   </SlidingModal>
 </template>
