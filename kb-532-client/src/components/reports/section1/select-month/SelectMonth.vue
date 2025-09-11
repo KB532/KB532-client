@@ -2,12 +2,8 @@
 import { ref, watch, computed } from 'vue';
 import { Icon } from '@iconify/vue';
 import SelectMonthModal from './SelectMonthModal.vue';
-import Chip from '@/components/common/Chip/BaseChip.vue';
-import { useRouter } from 'vue-router';
 
 const emit = defineEmits(['change']);
-const router = useRouter();
-const goReports = () => router.push('/expense');
 
 const today = new Date();
 const currentMonth = today.getMonth() + 1;
@@ -80,15 +76,7 @@ watch(
           : 'text-black cursor-pointer',
       ]"
       @click="nextMonth"
-    /><Chip
-      size="small"
-      variant="outline"
-      class="shrink-0 whitespace-nowrap cursor-pointer ml-auto"
-      @click="goReports"
-    >
-      전체 리포트 보기
-      <Icon icon="material-symbols:chevron-right" class="w-4 h-auto text-kb-gray-dark" />
-    </Chip>
+    />
 
     <SelectMonthModal
       v-model="showListModal"

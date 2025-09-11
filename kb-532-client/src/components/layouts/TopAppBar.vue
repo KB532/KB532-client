@@ -4,7 +4,7 @@ import { useRoute, RouterLink } from 'vue-router';
 import { Icon } from '@iconify/vue';
 
 // 숨길 경로들
-const HIDDEN_ROUTES = ['/login', '/welcome', '/signup', '/goals'];
+const HIDDEN_ROUTES = ['/login', '/welcome', '/signup', '/goals', '/expense'];
 
 const route = useRoute();
 const isHidden = computed(() => HIDDEN_ROUTES.some((prefix) => route.path.startsWith(prefix)));

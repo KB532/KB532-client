@@ -1,11 +1,20 @@
 <script setup>
 import { ref } from 'vue';
+
+import { Icon } from '@iconify/vue';
 import BaseCard from '@/components/common/Card/BaseCard.vue';
 import SelectMonth from '@/components/reports/section1/select-month/SelectMonth.vue';
+import Chip from '@/components/common/Chip/BaseChip.vue';
 import ExpenseCategoryChart from '@/components/reports/section1/ExpenseCategoryChart.vue';
 import ShowDetailButton from '@/components/reports/section1/ShowDetailButton.vue';
 import ExpenseDetailList from '@/components/reports/section1/expense-detail-list/ExpenseDetailList.vue';
 import { getMonthlySpending } from '@/api/transactions';
+
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const goReports = () => router.push('/expense');
 
 const isOpenList = ref(false);
 
@@ -34,7 +43,18 @@ const handleClick = () => {
 <template>
   <BaseCard>
     <div class="flex flex-col gap-4">
-      <SelectMonth @change="onMonthChange" />
+      <div class="flex justify-between">
+        <SelectMonth @change="onMonthChange" />
+        <Chip
+          size="small"
+          variant="outline"
+          class="shrink-0 whitespace-nowrap cursor-pointer"
+          @click="goReports"
+        >
+          지출 상세 내역 보기
+          <Icon icon="material-symbols:chevron-right" class="size-4 text-kb-gray-dark" />
+        </Chip>
+      </div>
 
       <div class="flex flex-col">
         <h1 class="title1 text-black">{{ total.toLocaleString() }}원</h1>
