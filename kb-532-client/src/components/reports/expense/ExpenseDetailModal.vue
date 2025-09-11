@@ -88,6 +88,7 @@ const isDirty = computed(
 
 const onSelectCategory = (v) => {
   selectedCategory.value = v;
+  categoryIconKey.value = iconKeyFromSubcategory(v) || 'unclassified';
   openedDropdown.value = null;
 };
 const onConfirmMemo = (v) => {
