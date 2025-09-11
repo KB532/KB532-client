@@ -5,7 +5,7 @@ import SlidingModal from '@/components/common/Modal/SlidingModal.vue';
 import DropdownItem from '@/components/common/Item/DropdownItem.vue';
 import DropdownModal from '@/components/common/Modal/DropdownModal.vue';
 import DarkButton from '@/components/common/Button/DarkButton.vue';
-import { numberWithCommas } from '@/assets/utils/index.js';
+import { numberWithCommas, formatDateTimeLocal } from '@/assets/utils/index.js';
 import { postTransaction } from "@/api/transactions.js";
 
 import VueDatePicker from '@vuepic/vue-datepicker';
@@ -25,6 +25,7 @@ const openedDropdown = ref(null);
 const paymentMethod = ref('');
 const category = ref('');
 const date = ref('');
+const merchant = ref('');
 const amount = ref('');
 const name = ref('');
 const memo = ref('');
@@ -77,15 +78,15 @@ const resetForm = () => {
 
 const submitFrom = async () => {
   const result = await postTransaction({
-    transactionDateTime: date.value,
+    transactionDateTime: formatDateTimeLocal(date.value),
     name: name.value,
-    merchant: '',
+    merchant: merchant.value,
     amount: amount.value,
     method: paymentMethod.value,
     memo: memo.value,
   });
 
-  if (result.data === 200) {
+  if (result.success) {
     handleClose();
   } else {
     console.log("등록 실패");
@@ -170,6 +171,14 @@ watch(
         </div>
       </div>
 
+      <div class="flex justify-between items-center">
+        <p class="body1 text-kb-gray-dark">지출처</p>
+        <input
+          v-model="merchant"
+          class="w-3/4 h-12 px-4 py-0 leading-[49px] rounded-lg bg-white shadow-drop-shadow outline-none ring-1 ring-gray-200 placeholder:text-gray-600 disabled:bg-gray-100 disabled:text-gray-400 body2 text-black"
+          placeholder="지출처를 입력해 주세요"
+        />
+      </div>
       <div class="flex justify-between items-center">
         <p class="body1 text-kb-gray-dark">금액</p>
         <input

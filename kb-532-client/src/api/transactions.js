@@ -140,7 +140,7 @@ export async function postTransaction(payload) {
     });
 
     if (data?.success && data?.data) {
-      return data.data;
+      return data;
     }
     return data;
   } catch (error) {

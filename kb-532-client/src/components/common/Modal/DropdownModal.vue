@@ -15,7 +15,7 @@ const props = defineProps({
 const emits = defineEmits(['select', 'confirm']);
 
 const handleClick = (item) => {
-  emit('select', item);
+  emits('select', item);
 }
 
 const inputValue = ref('');
