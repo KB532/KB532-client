@@ -25,7 +25,6 @@ const categoryIcon = {
   unclassified: { icon: 'material-symbols:question-mark-rounded', color: 'text-red-200' },
 };
 
-// 반응형: props.category 바뀌면 재계산
 const key = computed(() => iconKeyFromSubcategory(props.category));
 const current = computed(() => categoryIcon[key.value] || categoryIcon.unclassified);
 </script>
