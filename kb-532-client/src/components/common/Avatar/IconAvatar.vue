@@ -4,8 +4,6 @@ import { Icon } from '@iconify/vue';
 import { iconKeyFromSubcategory } from '@/utils/subcategoryIcon.js';
 
 const props = defineProps({
-  // 주의: 이 값은 '생활/카페·간식'같은 한글 서브카테고리거나,
-  // 이미 'snacks' 같은 아이콘 키일 수도 있음. 유틸이 둘 다 처리함.
   category: String,
   bg: { type: Boolean, default: true },
   size: { type: String, default: 'size-6' },
