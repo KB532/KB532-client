@@ -6,6 +6,12 @@ import ScrollFadeOverlay from '@/components/common/Overlay/ScrollFadeOverlay.vue
 import ExpenseDetailModal from '@/components/reports/expense/ExpenseDetailModal.vue';
 import { listTransactions } from '@/api/transactions';
 
+const props = defineProps({
+  ym: { type: String, default: '' },
+  from: { type: String, default: '' },
+  to: { type: String, default: '' },
+});
+
 const listRef = ref(null);
 const isAtBottom = ref(false);
 
@@ -27,19 +33,28 @@ const handleClickItem = (item) => {
   isModalOpen.value = true;
 };
 
+function monthRangeFromYm(ym) {
+  if (!/^\d{4}-\d{2}$/.test(ym || '')) return defaultMonthRange();
+  const [y, m] = ym.split('-').map((v) => +v);
+  const iso = (d) => d.toISOString().slice(0, 10);
+  return { from: iso(new Date(y, m - 1, 1)), to: iso(new Date(y, m, 0)) };
+}
+
+function last30DaysRange() {
+  const today = new Date();
+  const past = new Date();
+  past.setDate(today.getDate() - 30); // 오늘 기준 -30일
+
+  const iso = (d) => d.toISOString().slice(0, 10);
+
+  return { from: iso(past), to: iso(today) };
+}
+
 function isUncategorized(tx) {
   const c = tx?.classification;
   if (!c) return true;
-  const cat = (c.category || '').toUpperCase();
-  const status = (c.status || '').toUpperCase();
   const sub = (c.subcategory || '').trim();
-  return (
-    cat === 'UNCATEGORIZED' ||
-    status === 'UNCATEGORIZED' ||
-    status === 'UNSET' ||
-    status === 'NONE' ||
-    sub === ''
-  );
+  return ( sub === '미분류' );
 }
 
 function fmt(dt) {
@@ -73,7 +88,17 @@ async function load() {
   loading.value = true;
   error.value = '';
   try {
-    const res = await listTransactions({ page: 1, size: 50 });
+    let range = { from: props.from, to: props.to };
+    if (!range.from || !range.to) {
+      range = props.ym ? monthRangeFromYm(props.ym) : last30DaysRange();
+    }
+
+    const res = await listTransactions({
+      page: 1,
+      size: 200,
+      from: range.from,
+      to: range.to,
+    });
 
     const source = Array.isArray(res?.content) ? res.content : [];
     const items = source
